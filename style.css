@@ -58,7 +58,16 @@ section p strong {
     color: #333;
 }
 
-/* Estilos da tabela de produtos e impostos */
+/* Inputs do destinatário */
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilos da tabela de produtos */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -78,6 +87,21 @@ table th {
 
 table td {
     background-color: #fafafa;
+}
+
+/* Botões */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #45a049;
 }
 
 /* Estilos para totais */
