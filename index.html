@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Fiscal Eletrônica - NF-e</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="nota-fiscal">
+        <header>
+            <h1>Nota Fiscal Eletrônica (NF-e)</h1>
+            <p class="data">Data de Emissão: <span id="data-emissao">17/06/2025</span></p>
+        </header>
+
+        <section class="dados-emitente">
+            <h2>Emitente</h2>
+            <p><strong>CNPJ:</strong> 12.345.678/0001-95</p>
+            <p><strong>Razão Social:</strong> Empresa Teste LTDA</p>
+            <p><strong>Nome Fantasia:</strong> Empresa Teste</p>
+            <p><strong>Endereço:</strong> Rua Teste, 100 - Centro - São Paulo, SP</p>
+            <p><strong>Telefone:</strong> (11) 1234-5678</p>
+            <p><strong>Inscrição Estadual:</strong> 123.456.789.000</p>
+        </section>
+
+        <section class="dados-destinatario">
+            <h2>Destinatário</h2>
+            <p><strong>CNPJ:</strong> 98.765.432/0001-98</p>
+            <p><strong>Razão Social:</strong> Cliente Exemplo</p>
+            <p><strong>Endereço:</strong> Avenida Exemplo, 200 - Jardim Exemplo - São Paulo, SP</p>
+            <p><strong>Telefone:</strong> (11) 9876-5432</p>
+            <p><strong>Inscrição Estadual:</strong> 987.654.321.000</p>
+        </section>
+
+        <section class="dados-nfe">
+            <h2>Dados da Nota Fiscal</h2>
+            <p><strong>Chave de Acesso:</strong> 12345678901234567890123456789012345678901234</p>
+            <p><strong>Natureza da Operação:</strong> Venda de Mercadoria</p>
+            <p><strong>CFOP:</strong> 5101 - Venda de produção do estabelecimento</p>
+            <p><strong>Finalidade:</strong> Normal</p>
+        </section>
+
+        <section class="produtos">
+            <h2>Produtos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Preço Unitário</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Produto Exemplo 1</td>
+                        <td>10</td>
+                        <td>R$ 50,00</td>
+                        <td>R$ 500,00</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Produto Exemplo 2</td>
+                        <td>5</td>
+                        <td>R$ 100,00</td>
+                        <td>R$ 500,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="impostos">
+            <h2>Impostos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imposto</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ICMS</td>
+                        <td>R$ 90,00</td>
+                    </tr>
+                    <tr>
+                        <td>PIS</td>
+                        <td>R$ 15,00</td>
+                    </tr>
+                    <tr>
+                        <td>COFINS</td>
+                        <td>R$ 30,00</td>
+                    </tr>
+                    <tr>
+                        <td>IPI</td>
+                        <td>R$ 50,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="totais">
+            <h2>Totais</h2>
+            <p><strong>Valor Total:</strong> R$ 1000,00</p>
+            <p><strong>Desconto:</strong> R$ 0,00</p>
+            <p><strong>Frete:</strong> R$ 0,00</p>
+            <p><strong>Valor ICMS:</strong> R$ 90,00</p>
+            <p><strong>Valor IPI:</strong> R$ 50,00</p>
+            <p><strong>Total de Impostos:</strong> R$ 185,00</p>
+        </section>
+
+        <section class="transportadora">
+            <h2>Transportadora</h2>
+            <p><strong>CNPJ:</strong> 12.987.654/0001-23</p>
+            <p><strong>Razão Social:</strong> Transportadora Exemplo</p>
+            <p><strong>Endereço:</strong> Rua Transporte, 500 - São Paulo, SP</p>
+            <p><strong>Placa do Veículo:</strong> ABC1234</p>
+        </section>
+
+        <section class="pagamento">
+            <h2>Forma de Pagamento</h2>
+            <p><strong>Forma de Pagamento:</strong> À Vista</p>
+            <p><strong>Valor Pago:</strong> R$ 1000,00</p>
+        </section>
+
+        <footer>
+            <p>Emitido por Sistema de Gestão - CNPJ: 12.345.678/0001-95</p>
+        </footer>
+    </div>
+</body>
+</html>
