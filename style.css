@@ -7,12 +7,11 @@
 
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #060af5c9; /* Fundo azul */
+    background-color: #060af5c9;
     color: #2d79fb;
     padding: 30px;
 }
 
-/* Estrutura da nota fiscal */
 .nota-fiscal {
     background-color: #0812de75;
     padding: 30px;
