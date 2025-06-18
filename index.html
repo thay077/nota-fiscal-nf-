@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Login e Nota Fiscal</title>
+  <title>Login e Nota Fiscal com Cadastro e Consulta de Produtos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,6 +73,8 @@
       font-weight: bold;
     }
 
+    /* Nota Fiscal Estilos */
+
     .section {
       margin-top: 20px;
     }
@@ -127,6 +129,8 @@
       font-weight: bold;
       color: #003366;
     }
+
+    /* Estilo para info emissão */
     .emissao-info {
       background: #f0f8ff;
       padding: 15px;
@@ -151,13 +155,65 @@
       padding: 6px;
       font-weight: normal;
     }
+
+    /* Consulta Produtos */
+
+    #consulta-produtos {
+      margin-top: 30px;
+      border-top: 2px solid #99c2ff;
+      padding-top: 20px;
+    }
+
+    #consulta-produtos input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #99c2ff;
+      box-sizing: border-box;
+      margin-top: 5px;
+    }
+
+    #resultado-consulta {
+      margin-top: 15px;
+      border: 1px solid #99c2ff;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    #resultado-consulta table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #resultado-consulta th, #resultado-consulta td {
+      border: 1px solid #99c2ff;
+      padding: 8px;
+      text-align: left;
+    }
+
+    #resultado-consulta th {
+      background: #cce6ff;
+      color: #003366;
+      position: sticky;
+      top: 0;
+    }
+
+    /* Botão menor no cadastro da consulta */
+    #btn-add-produto-consulta {
+      width: auto;
+      flex: none;
+      padding: 8px 15px;
+      margin-left: 10px;
+    }
+
   </style>
 </head>
 <body>
 
   <div class="container">
 
-   
+    <!-- Tela de Login -->
     <div id="login" class="login-box active">
       <h2>Login de Usuário</h2>
       <label for="usuario">Usuário:</label>
@@ -168,7 +224,7 @@
       <div id="erroLogin" class="error-msg"></div>
     </div>
 
-    
+    <!-- Tela Nota Fiscal -->
     <div id="notaFiscal" class="nota-box">
       <h2>Nota Fiscal Eletrônica</h2>
 
@@ -203,11 +259,11 @@
       </div>
 
       <div class="section">
-        <div class="section-title">Adicionar Produto</div>
+        <div class="section-title">Adicionar Produto na Nota</div>
         <div class="input-row">
           <input type="text" id="produto-descricao" placeholder="Descrição do Produto" />
           <input type="number" id="produto-quantidade" placeholder="Quantidade" min="1" />
-          <input type="number" id="produto-preco" placeholder="Preço Unitário (R$)" min="0" step="0.01" />
+          <input type="text" id="produto-preco" placeholder="Preço Unitário (R$)" />
           <button onclick="adicionarProduto()">Adicionar</button>
         </div>
       </div>
@@ -231,164 +287,226 @@
         <strong>Total Geral: R$ 0,00</strong>
       </div>
 
+      <!-- Seção Consulta e Cadastro de Produtos -->
+      <div id="consulta-produtos" class="section">
+        <div class="section-title">Consulta e Cadastro de Produtos</div>
+
+        <label for="input-consulta">Buscar Produto:</label>
+        <input type="text" id="input-consulta" placeholder="Digite nome do produto para buscar..." oninput="consultarProdutos()" />
+
+        <div class="input-row" style="margin-top:10px;">
+          <input type="text" id="novo-produto-descricao" placeholder="Descrição do Produto" />
+          <input type="number" id="novo-produto-quantidade" placeholder="Quantidade" min="1" />
+          <input type="text" id="novo-produto-preco" placeholder="Preço Unitário (R$)" />
+          <button id="btn-add-produto-consulta" onclick="adicionarProdutoConsulta()">Adicionar Produto</button>
+        </div>
+
+        <div id="resultado-consulta"></div>
+      </div>
+
       <button onclick="fazerLogout()" style="background:#cc0000; margin-top: 30px;">Sair</button>
     </div>
 
   </div>
 
-  <script>
+<script>
+ 
+  const usuarios = {
+    "usuario1": "senha123",
+    "admin": "admin2025",
+    "vendedor": "venda2025"
+  };
+
+  
+  const loginBox = document.getElementById('login');
+  const notaBox = document.getElementById('notaFiscal');
+  const erroLogin = document.getElementById('erroLogin');
+  const usuarioInput = document.getElementById('usuario');
+  const senhaInput = document.getElementById('senha');
+  const usuarioEmissor = document.getElementById('usuarioEmissor');
+
+  
+  let produtos = [];
+
+ 
+  function fazerLogin() {
+    const usuario = usuarioInput.value.trim();
+    const senha = senhaInput.value;
+
+    if (!usuario || !senha) {
+      erroLogin.textContent = "Informe usuário e senha.";
+      return;
+    }
+
+    if (usuarios[usuario] && usuarios[usuario] === senha) {
+      erroLogin.textContent = "";
+      usuarioInput.value = "";
+      senhaInput.value = "";
+      mostrarNotaFiscal(usuario);
+    } else {
+      erroLogin.textContent = "Usuário ou senha inválidos.";
+    }
+  }
+
+ 
+  function mostrarNotaFiscal(usuarioLogado) {
+    loginBox.classList.remove('active');
+    notaBox.classList.add('active');
+    usuarioEmissor.value = usuarioLogado;
+    mostrarDataHoraEmissao();
+    atualizarTabela();
+    consultarProdutos(); // mostrar tabela consulta limpa
+  }
+
+  
+  function fazerLogout() {
+    notaBox.classList.remove('active');
+    loginBox.classList.add('active');
+    limparNotaFiscal();
+  }
+
+ 
+  function limparNotaFiscal() {
+    document.getElementById("loja-nome").value = "Loja Exemplo Ltda";
+    document.getElementById("loja-cnpj").value = "12.345.678/0001-99";
+    document.getElementById("loja-endereco").value = "Rua Principal, 123 - Centro";
+
+    document.getElementById("cliente-nome").value = "";
+    document.getElementById("cliente-cpf").value = "";
+    document.getElementById("cliente-cnpj").value = "";
+    document.getElementById("cliente-endereco").value = "";
+
+    produtos = [];
+    atualizarTabela();
+    limparConsulta();
+  }
+
+  
+  function formatarDataHora(date) {
+    const d = date.getDate().toString().padStart(2,'0');
+    const m = (date.getMonth()+1).toString().padStart(2,'0');
+    const y = date.getFullYear();
+    const h = date.getHours().toString().padStart(2,'0');
+    const min = date.getMinutes().toString().padStart(2,'0');
+    const s = date.getSeconds().toString().padStart(2,'0');
+    return `${d}/${m}/${y} ${h}:${min}:${s}`;
+  }
+
+  function mostrarDataHoraEmissao() {
+    const agora = new Date();
+    document.getElementById("dataHoraEmissao").innerText = formatarDataHora(agora);
+  }
+
+  
+  function adicionarProduto() {
+    const descricao = document.getElementById("produto-descricao").value.trim();
+    const quantidade = parseFloat(document.getElementById("produto-quantidade").value);
+    let precoStr = document.getElementById("produto-preco").value.trim();
+    precoStr = precoStr.replace(",", ".");
+    const preco = parseFloat(precoStr);
+
+    if (!descricao || isNaN(quantidade) || quantidade <= 0 || isNaN(preco) || preco <= 0) {
+      alert("Preencha corretamente todos os campos do produto.");
+      return;
+    }
+
+os
+    produtos.push({
+      descricao,
+      quantidade,
+      preco
+    });
+
     
-    const usuarios = {
-      "usuario1": "senha123",
-      "admin": "admin2025",
-      "vendedor": "venda2025"
-    };
+    document.getElementById("produto-descricao").value = "";
+    document.getElementById("produto-quantidade").value = "";
+    document.getElementById("produto-preco").value = "";
 
-    const loginBox = document.getElementById('login');
-    const notaBox = document.getElementById('notaFiscal');
-    const erroLogin = document.getElementById('erroLogin');
-    const usuarioInput = document.getElementById('usuario');
-    const senhaInput = document.getElementById('senha');
-    const usuarioEmissor = document.getElementById('usuarioEmissor');
+    atualizarTabela();
+  }
 
-    
-    function fazerLogin() {
-      const usuario = usuarioInput.value.trim();
-      const senha = senhaInput.value;
+  
+  function atualizarTabela() {
+    const tbody = document.getElementById("tabela-produtos");
+    tbody.innerHTML = "";
 
-      if (!usuario || !senha) {
-        erroLogin.textContent = "Informe usuário e senha.";
-        return;
-      }
+    let totalMercadorias = 0;
 
-      if (usuarios[usuario] && usuarios[usuario] === senha) {
-        
-        erroLogin.textContent = "";
-        usuarioInput.value = "";
-        senhaInput.value = "";
-        mostrarNotaFiscal(usuario);
-      } else {
-        erroLogin.textContent = "Usuário ou senha inválidos.";
-      }
-    }
+    produtos.forEach((p, i) => {
+      const totalItem = p.quantidade * p.preco;
+      totalMercadorias += totalItem;
 
-    
-    function mostrarNotaFiscal(usuarioLogado) {
-      loginBox.classList.remove('active');
-      notaBox.classList.add('active');
-      usuarioEmissor.value = usuarioLogado;
-      mostrarDataHoraEmissao();
-    }
+      const tr = document.createElement("tr");
 
-    function fazerLogout() {
-      notaBox.classList.remove('active');
-      loginBox.classList.add('active');
-      limparNotaFiscal();
-    }
-
-   
-    function limparNotaFiscal() {
-      document.getElementById("loja-nome").value = "Loja Exemplo Ltda";
-      document.getElementById("loja-cnpj").value = "12.345.678/0001-99";
-      document.getElementById("loja-endereco").value = "Rua Principal, 123 - Centro";
-
-      document.getElementById("cliente-nome").value = "";
-      document.getElementById("cliente-cpf").value = "";
-      document.getElementById("cliente-cnpj").value = "";
-      document.getElementById("cliente-endereco").value = "";
-
-      produtos = [];
-      atualizarTabela();
-    }
-
-
-
-    const ICMS = 0.18;
-    const IPI = 0.04;
-    let produtos = [];
-
-    function formatarDataHora(date) {
-      const d = date.getDate().toString().padStart(2,'0');
-      const m = (date.getMonth()+1).toString().padStart(2,'0');
-      const y = date.getFullYear();
-      const h = date.getHours().toString().padStart(2,'0');
-      const min = date.getMinutes().toString().padStart(2,'0');
-      const s = date.getSeconds().toString().padStart(2,'0');
-      return `${d}/${m}/${y} ${h}:${min}:${s}`;
-    }
-
-    function mostrarDataHoraEmissao() {
-      const agora = new Date();
-      document.getElementById("dataHoraEmissao").innerText = formatarDataHora(agora);
-    }
-
-    function adicionarProduto() {
-      const descricao = document.getElementById("produto-descricao").value.trim();
-      const quantidade = parseFloat(document.getElementById("produto-quantidade").value);
-      const preco = parseFloat(document.getElementById("produto-preco").value);
-
-      if (!descricao) {
-        alert("Informe a descrição do produto.");
-        return;
-      }
-      if (isNaN(quantidade) || quantidade <= 0) {
-        alert("Quantidade inválida.");
-        return;
-      }
-      if (isNaN(preco) || preco < 0) {
-        alert("Preço inválido.");
-        return;
-      }
-
-      produtos.push({ descricao, quantidade, preco });
-      limparCamposProduto();
-      atualizarTabela();
-    }
-
-    function limparCamposProduto() {
-      document.getElementById("produto-descricao").value = "";
-      document.getElementById("produto-quantidade").value = "";
-      document.getElementById("produto-preco").value = "";
-      document.getElementById("produto-descricao").focus();
-    }
-
-    function atualizarTabela() {
-      const tbody = document.getElementById("tabela-produtos");
-      tbody.innerHTML = "";
-
-      let totalMercadorias = 0;
-
-      produtos.forEach(({ descricao, quantidade, preco }) => {
-        const total = quantidade * preco;
-        totalMercadorias += total;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${descricao}</td>
-          <td>${quantidade}</td>
-          <td>R$ ${preco.toFixed(2)}</td>
-          <td>R$ ${total.toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      const valorICMS = totalMercadorias * ICMS;
-      const valorIPI = totalMercadorias * IPI;
-      const totalGeral = totalMercadorias + valorICMS + valorIPI;
-
-      const totaisDiv = document.getElementById("totais");
-      totaisDiv.innerHTML = `
-        Total Mercadorias: R$ ${totalMercadorias.toFixed(2)}<br>
-        ICMS (18%): R$ ${valorICMS.toFixed(2)}<br>
-        IPI (4%): R$ ${valorIPI.toFixed(2)}<br>
-        <strong>Total Geral: R$ ${totalGeral.toFixed(2)}</strong>
+      tr.innerHTML = `
+        <td>${p.descricao}</td>
+        <td>${p.quantidade}</td>
+        <td>R$ ${p.preco.toFixed(2).replace(".", ",")}</td>
+        <td>R$ ${totalItem.toFixed(2).replace(".", ",")}</td>
       `;
-    }
+
+      tbody.appendChild(tr);
+    });
 
     
-    window.onload = () => {
-      loginBox.classList.add('active');
+    const icms = totalMercadorias * 0.18;
+    const ipi = totalMercadorias * 0.04;
+    const totalGeral = totalMercadorias + icms + ipi;
+
+    const totaisDiv = document.getElementById("totais");
+    totaisDiv.innerHTML = `
+      Total Mercadorias: R$ ${totalMercadorias.toFixed(2).replace(".", ",")}<br>
+      ICMS (18%): R$ ${icms.toFixed(2).replace(".", ",")}<br>
+      IPI (4%): R$ ${ipi.toFixed(2).replace(".", ",")}<br>
+      <strong>Total Geral: R$ ${totalGeral.toFixed(2).replace(".", ",")}</strong>
+    `;
+  }
+
+ 
+  function consultarProdutos() {
+    const filtro = document.getElementById("input-consulta").value.trim().toLowerCase();
+    const resultadoDiv = document.getElementById("resultado-consulta");
+
+    if (produtos.length === 0) {
+      resultadoDiv.innerHTML = "<p style='color:#666;'>Nenhum produto cadastrado.</p>";
+      return;
     }
-  </script>
-</body>
-</html>
+
+    const produtosFiltrados = produtos.filter(p => p.descricao.toLowerCase().includes(filtro));
+
+    if (produtosFiltrados.length === 0) {
+      resultadoDiv.innerHTML = "<p style='color:#666;'>Nenhum produto encontrado para a busca.</p>";
+      return;
+    }
+
+
+    let html = `<table><thead><tr>
+      <th>Descrição</th><th>Quantidade</th><th>Preço Unitário (R$)</th><th>Total (R$)</th>
+      </tr></thead><tbody>`;
+
+    produtosFiltrados.forEach(p => {
+      const totalItem = p.quantidade * p.preco;
+      html += `<tr>
+        <td>${p.descricao}</td>
+        <td>${p.quantidade}</td>
+        <td>R$ ${p.preco.toFixed(2).replace(".", ",")}</td>
+        <td>R$ ${totalItem.toFixed(2).replace(".", ",")}</td>
+      </tr>`;
+    });
+
+    html += "</tbody></table>";
+    resultadoDiv.innerHTML = html;
+  }
+
+  // Adicionar produto via área consulta (cadastro de produto)
+  function adicionarProdutoConsulta() {
+    const descricao = document.getElementById("novo-produto-descricao").value.trim();
+    const quantidade = parseFloat(document.getElementById("novo-produto-quantidade").value);
+    let precoStr = document.getElementById("novo-produto-preco").value.trim();
+    precoStr = precoStr.replace(",", ".");
+    const preco = parseFloat(precoStr);
+
+    if (!descricao || isNaN(quantidade) || quantidade <= 0 || isNaN(preco) || preco <= 0) {
+      alert("Preencha corretamente todos os campos do produto para cadastro.");
+      return;
+    }
