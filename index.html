@@ -2,441 +2,227 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PALMAS AUTO PEÇAS - NOTA FISCAL</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    /* -- Estilos gerais -- */
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5faff; margin: 0; color: #003366;
-      display: flex; flex-direction: column; min-height: 100vh;
-    }
-    h1 {
-      background: #007acc; color: white; margin: 0;
-      padding: 20px; text-align: center; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .container {
-      flex-grow: 1; max-width: 900px; margin: 25px auto;
-      background: white; padding: 25px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,122,204,0.2);
-    }
-    label { display: block; margin: 12px 0 6px; font-weight: 600; }
-    input, select, button {
-      font-size: 1rem;
-    }
-    input, select {
-      width: 100%; padding: 10px 12px; border-radius: 6px;
-      border: 1.8px solid #7db9e8;
-      transition: border-color 0.3s;
-    }
-    input:focus, select:focus {
-      border-color: #005f99; box-shadow: 0 0 8px #4ca3ddaa; outline: none;
-    }
-    button {
-      background: #007acc; color: white; border: none;
-      padding: 12px 22px; border-radius: 6px; font-weight: 600;
-      cursor: pointer; margin-top: 18px;
-      transition: background-color 0.3s, opacity 0.3s;
-      user-select: none;
-    }
-    button:hover:not(:disabled) { background: #005f99; }
-    button:disabled { background: #a3c7ff; cursor: default; }
-    .btn-group {
-      display: flex; justify-content: center;
-      gap: 18px; margin-bottom: 25px; flex-wrap: wrap;
-    }
-    table {
-      width: 100%; border-collapse: collapse;
-      margin-top: 18px; font-size: 0.9rem;
-    }
-    th, td {
-      border: 1.6px solid #a8cdfd; padding: 10px 12px; text-align: left;
-    }
-    th {
-      background: #d0e5ff;
-    }
-    td button {
-      background: #cc3300; font-size: 0.85rem;
-      padding: 6px 10px; border-radius: 4px;
-      transition: background 0.3s;
-    }
-    td button:hover { background: #a02700; }
-    .hidden { display: none!important; }
-    #msgFeedback {
-      position: fixed; bottom: 25px; left: 50%;
-      transform: translateX(-50%);
-      background: #007accdd; color: white;
-      padding: 12px 22px; border-radius: 30px;
-      font-weight: 600; font-size: 1rem;
-      box-shadow: 0 4px 10px rgba(0,122,204,0.6);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s;
-      z-index: 9999;
-    }
-    #msgFeedback.show { opacity: 1; pointer-events: auto; }
-    #notaEmitida {
-      margin-top: 25px; padding: 20px; border-radius: 10px;
-      border: 1.5px solid #7db9e8; background: #e8f2ff;
-      font-family: 'Courier New', monospace; white-space: pre-wrap;
-      font-size: 0.9rem; color: #004080; min-height: 200px;
-    }
-    footer {
-      text-align: center; font-size: 0.85rem;
-      color: #005f99; padding: 12px 0;
-      background: #d0e5ff;
-    }
+    body { font-family: Arial, sans-serif; background: #e6f0fa; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #005a9c; }
+    .container { max-width: 1200px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .login, .painel, .cadastro, .nota-fiscal { display: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #005a9c; color: white; }
+    button { background: #005a9c; color: white; border: none; padding: 8px 12px; cursor: pointer; margin: 5px 0; }
+    input, select { padding: 6px; width: 100%; margin: 4px 0; }
+    .flex { display: flex; gap: 20px; }
+    .flex > div { flex: 1; }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>PALMAS AUTO PEÇAS - NOTA FISCAL</h1>
 
-  <h1>PALMAS AUTO PEÇAS - NOTA FISCAL</h1>
-
-  <!-- LOGIN -->
-  <div class="container" id="loginContainer">
-    <h2>Login</h2>
-    <label for="usuario">Usuário:</label>
-    <input type="text" id="usuario" placeholder="Digite seu usuário" />
-    <label for="senha">Senha:</label>
-    <input type="password" id="senha" placeholder="Digite sua senha" />
-    <button onclick="login()">Entrar</button>
-  </div>
-
-  <!-- APP PRINCIPAL -->
-  <div class="container hidden" id="mainContainer">
-
-    <div class="btn-group">
-      <button onclick="mostrarTela('produtosSection')">Cadastrar Produtos</button>
-      <button onclick="mostrarTela('clientesSection')">Cadastrar Clientes</button>
-      <button onclick="mostrarTela('notaSection')">Emitir Nota Fiscal</button>
+    <div class="login">
+      <h2>Login</h2>
+      <select id="usuarioSelect"></select>
+      <input type="password" id="senha" placeholder="Senha (qualquer)" />
+      <button onclick="entrar()">Entrar</button>
     </div>
 
-    <!-- CADASTRO PRODUTOS -->
-    <section id="produtosSection" class="hidden">
-      <h2>Cadastro de Produtos</h2>
-      <label for="codigoProduto">Código (2 dígitos):</label>
-      <input type="text" maxlength="2" id="codigoProduto" placeholder="Ex: 01" />
-      <label for="nomeProduto">Nome do Produto:</label>
-      <input type="text" id="nomeProduto" placeholder="Ex: Filtro de Óleo" />
-      <label for="valorProduto">Valor (R$):</label>
-      <input type="number" step="0.01" id="valorProduto" placeholder="Ex: 99.90" />
-      <button onclick="adicionarProduto()">Adicionar Produto</button>
-      <table id="tabelaProdutos">
-        <thead><tr><th>Código</th><th>Nome</th><th>Valor</th><th>Ação</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div style="margin-top:15px;">
-        <button onclick="exportarDados('produtos')">Exportar Produtos (JSON)</button>
-        <input type="file" id="importProdutos" onchange="importarDados('produtos')">
-      </div>
-    </section>
+    <div class="painel">
+      <h2>Bem-vindo</h2>
+      <button onclick="mostrarCadastroCliente()">Cadastrar Cliente</button>
+      <button onclick="mostrarCadastroProduto()">Cadastrar Produto</button>
+      <button onclick="mostrarNotaFiscal()">Emitir Nota Fiscal</button>
+      <button onclick="mostrarRelatorio()">Relatórios</button>
+    </div>
 
-    <!-- CADASTRO CLIENTES -->
-    <section id="clientesSection" class="hidden">
-      <h2>Cadastro de Clientes</h2>
-      <label for="nomeCli">Nome do Cliente:</label>
-      <input type="text" id="nomeCli" placeholder="Ex: João Silva" />
-      <label for="cpfCli">CPF/CNPJ:</label>
-      <input type="text" id="cpfCli" placeholder="000.000.000-00 ou 00.000.000/0000-00" />
-      <label for="endCli">Endereço:</label>
-      <input type="text" id="endCli" placeholder="Rua Exemplo, 123" />
-      <button onclick="adicionarCliente()">Adicionar Cliente</button>
-      <table id="tabelaClientes">
-        <thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Endereço</th><th>Ação</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div style="margin-top:15px;">
-        <button onclick="exportarDados('clientes')">Exportar Clientes (JSON)</button>
-        <input type="file" id="importClientes" onchange="importarDados('clientes')">
-      </div>
-    </section>
+    <div class="cadastro" id="cadastroCliente">
+      <h2>Cadastro de Cliente</h2>
+      <input type="text" id="clienteNome" placeholder="Nome do Cliente" />
+      <input type="text" id="clienteCPF" placeholder="CPF ou CNPJ" />
+      <input type="text" id="clienteEndereco" placeholder="Endereço" />
+      <button onclick="salvarCliente()">Salvar Cliente</button>
+    </div>
 
-    <!-- EMISSÃO DE NOTA -->
-    <section id="notaSection" class="hidden">
+    <div class="cadastro" id="cadastroProduto">
+      <h2>Cadastro de Produto</h2>
+      <input type="text" id="produtoNome" placeholder="Nome do Produto" />
+      <input type="number" id="produtoValor" placeholder="Valor" />
+      <button onclick="salvarProduto()">Salvar Produto</button>
+      <table id="tabelaProdutos"></table>
+    </div>
+
+    <div class="nota-fiscal">
       <h2>Emitir Nota Fiscal</h2>
-      <label for="selCliente">Cliente:</label>
-      <select id="selCliente"><option value="">-- selecione --</option></select>
-      <label for="selProduto">Produto:</label>
-      <select id="selProduto"><option value="">-- selecione --</option></select>
-      <label for="qtdNota">Quantidade:</label>
-      <input type="number" id="qtdNota" value="1" min="1" />
-      <button id="btnAddNota" onclick="adicionarItemNota()">Adicionar à Nota</button>
-      <table id="tabelaNota"><thead>
-        <tr><th>Código</th><th>Produto</th><th>Valor</th><th>Qtde</th><th>Subtotal</th></tr>
-      </thead><tbody></tbody></table>
-
-      <div style="margin-top:15px;">
-        <button id="btnEmitirNota" onclick="emitirNota()" disabled>Emitir Nota Fiscal</button>
-        <button id="btnImprimirNota" class="hidden" onclick="window.print()">Imprimir Nota</button>
-        <button id="btnDownloadPDF" class="hidden" onclick="baixarPDF()">Baixar PDF</button>
+      <div class="flex">
+        <div>
+          <label>Data/Hora:</label>
+          <input type="text" id="dataHora" disabled />
+          <label>Emitente:</label>
+          <input type="text" value="PALMAS AUTO PEÇAS" disabled />
+          <label>Cliente:</label>
+          <select id="clienteSelect"></select>
+          <label>Forma de Pagamento:</label>
+          <select id="pagamento">
+            <option>Dinheiro</option>
+            <option>Cartão</option>
+            <option>Pix</option>
+            <option>Boleto</option>
+          </select>
+        </div>
+        <div>
+          <label>Produto:</label>
+          <select id="produtoSelect"></select>
+          <label>Quantidade:</label>
+          <input type="number" id="quantidade" />
+          <label>Desconto:</label>
+          <input type="number" id="desconto" placeholder="R$" />
+          <label>Frete:</label>
+          <input type="number" id="frete" placeholder="R$" />
+          <button onclick="adicionarItem()">Adicionar Produto</button>
+        </div>
       </div>
+      <table id="tabelaNota"></table>
+      <button onclick="gerarPDF()">Exportar PDF</button>
+    </div>
 
-      <pre id="notaEmitida" class="hidden"></pre>
-    </section>
-
+    <div class="relatorios">
+      <h2>Relatório de Vendas</h2>
+      <p>Em breve...</p>
+    </div>
   </div>
 
-  <div id="msgFeedback"></div>
-  <footer>&copy; 2025 Palmas Auto Peças</footer>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    let produtos = [
-      {codigo:'01', nome:'Filtro de Óleo', valor:49.90},
-      {codigo:'02', nome:'Pastilha de Freio', valor:129.90},
-      {codigo:'03', nome:'Óleo 5W30', valor:99.50}
+    const usuarios = ['Admin', 'Caixa 1', 'Caixa 2'];
+    const clientes = [];
+    const produtos = [
+      { nome: 'Filtro de óleo', valor: 30.0, codigo: '01' },
+      { nome: 'Pastilha de freio', valor: 120.0, codigo: '02' },
+      { nome: 'Bateria 12V', valor: 320.0, codigo: '03' }
     ];
-    let clientes = [];
-    let itensNota = [];
+    const notaItens = [];
 
-    const msg = document.getElementById('msgFeedback');
-
-    function mostrarMsg(txt, ok=true){
-      msg.textContent = txt;
-      msg.style.backgroundColor = ok ? '#007accdd' : '#cc3300dd';
-      msg.classList.add('show');
-      setTimeout(()=> msg.classList.remove('show'), 3500);
-    }
-
-    function login(){
-      const u=document.getElementById('usuario').value.trim();
-      const s=document.getElementById('senha').value.trim();
-      if(!u||!s){ mostrarMsg('Preencha usuário e senha.', false); return; }
-      document.getElementById('loginContainer').classList.add('hidden');
-      document.getElementById('mainContainer').classList.remove('hidden');
-      mostrarTela('produtosSection');
-      atualizarTudo();
-      mostrarMsg('Bem-vindo(a)!');
-    }
-
-    function mostrarTela(id){
-      ['produtosSection','clientesSection','notaSection'].forEach(sec=>{
-        document.getElementById(sec).classList.toggle('hidden', sec!==id);
+    // Inicialização
+    window.onload = () => {
+      document.querySelector('.login').style.display = 'block';
+      const usuarioSelect = document.getElementById('usuarioSelect');
+      usuarios.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = u;
+        usuarioSelect.appendChild(opt);
       });
-      if(id!=='notaSection') limparNota();
-    }
-
-    /* — Produtos — */
-    function atualizarTabelaProdutos(){
-      const tb=document.querySelector('#tabelaProdutos tbody');
-      tb.innerHTML='';
-      produtos.forEach(p=>{
-        tb.innerHTML+=`<tr>
-          <td>${p.codigo}</td><td>${p.nome}</td><td>${p.valor.toFixed(2)}</td>
-          <td><button onclick="deletarProduto('${p.codigo}')">Excluir</button></td>
-        </tr>`;
-      });
-    }
-
-    function deletarProduto(c){
-      if(confirm('Excluir este produto?')){
-        produtos=produtos.filter(x=>x.codigo!==c);
-        atualizarTudo();
-        mostrarMsg('Produto excluído.');
-      }
-    }
-
-    function adicionarProduto(){
-      let c=document.getElementById('codigoProduto').value.trim();
-      let n=document.getElementById('nomeProduto').value.trim();
-      let v=parseFloat(document.getElementById('valorProduto').value);
-      if(!/^\d{2}$/.test(c)){ mostrarMsg('Código: 2 dígitos.', false); return;}
-      if(!n){ mostrarMsg('Informe o nome.', false); return;}
-      if(isNaN(v)||v<=0){ mostrarMsg('Valor inválido.', false); return;}
-      if(produtos.some(x=>x.codigo===c)){ mostrarMsg('Código já existe.', false); return;}
-      produtos.push({codigo:c,nome:n,valor:v});
-      document.getElementById('codigoProduto').value='';
-      document.getElementById('nomeProduto').value='';
-      document.getElementById('valorProduto').value='';
-      document.getElementById('codigoProduto').focus();
-      atualizarTudo();
-      mostrarMsg('Produto adicionado!');
-    }
-
-    /* — Clientes — */
-    function atualizarTabelaClientes(){
-      const tb=document.querySelector('#tabelaClientes tbody');
-      tb.innerHTML='';
-      clientes.forEach((c,i)=>{
-        tb.innerHTML+=`<tr>
-          <td>${c.nome}</td><td>${c.cpfcnpj}</td><td>${c.endereco}</td>
-          <td><button onclick="deletarCliente(${i})">Excluir</button></td>
-        </tr>`;
-      });
-    }
-
-    function deletarCliente(i){
-      if(confirm('Excluir este cliente?')){
-        clientes.splice(i,1);
-        atualizarTudo();
-        mostrarMsg('Cliente excluído.');
-      }
-    }
-
-    function validarCPF(c){c=c.replace(/\D/g,''); 
-      if(c.length===11){
-        let s=[0,0], j=10;
-        for(let i=0;i<9;i++){s[0]+=parseInt(c[i])*j; j--;}
-        let d1=11-(s[0]%11); if(d1>=10)d1=0;
-        s[1]=0; j=11;
-        for(let i=0;i<10;i++){s[1]+=parseInt(c[i])*j; j--;}
-        let d2=11-(s[1]%11); if(d2>=10)d2=0;
-        return c[9]==d1&&c[10]==d2;
-      } else if(c.length===14) { /* validar CNPJ */
-        let a=[6,5,4,3,2,9,8,7,6,5,4,3,2];
-        let b=[5,4,3,2,9,8,7,6,5,4,3,2,0];
-        let suma=0, sumb=0;
-        for(let i=0;i<12;i++){suma+=parseInt(c[i])*a[i]; sumb+=parseInt(c[i])*b[i];}
-        let d1=suma%11<2?0:11-(suma%11);
-        sumb+=d1* b[12];
-        let d2=sumb%11<2?0:11-(sumb%11);
-        return c[12]==d1&&c[13]==d2;
-      }
-      return false;
-    }
-
-    function adicionarCliente(){
-      let n=document.getElementById('nomeCli').value.trim();
-      let cpf=document.getElementById('cpfCli').value.trim().replace(/\D/g,'');
-      let e=document.getElementById('endCli').value.trim();
-      if(n.length<3){mostrarMsg('Nome inválido.',false);return;}
-      if(!validarCPF(cpf)){mostrarMsg('CPF/CNPJ inválido.',false);return;}
-      if(e.length<5){mostrarMsg('Endereço curto.',false);return;}
-      clientes.push({nome:n,cpfcnpj:cpf,e});
-      document.getElementById('nomeCli').value='';document.getElementById('cpfCli').value='';document.getElementById('endCli').value='';
-      document.getElementById('nomeCli').focus();
-      atualizarTudo();
-      mostrarMsg('Cliente adicionado!');
-    }
-
-    /* — Export / Import — */
-    function exportarDados(tipo){
-      let data = tipo==='produtos'? produtos : clientes;
-      let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-      let a = document.createElement('a');
-      a.download = `${tipo}.json`;
-      a.href = URL.createObjectURL(blob);
-      a.click();
-      URL.revokeObjectURL(a.href);
-    }
-
-    function importarDados(tipo){
-      const input = tipo==='produtos'? document.getElementById('importProdutos') : document.getElementById('importClientes');
-      const file = input.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = e=>{
-        try{
-          const arr = JSON.parse(e.target.result);
-          if(Array.isArray(arr)) {
-            if(tipo==='produtos')
-              produtos = arr;
-            else clientes = arr;
-            atualizarTudo();
-            mostrarMsg(`${tipo} importados!`);
-          } else throw '';
-        } catch {
-          mostrarMsg('Arquivo JSON inválido.',false);
-        }
-        input.value='';
-      };
-      reader.readAsText(file);
-    }
-
-    /* — Nota Fiscal — */
-    function atualizarNota(){
-      const tbody = document.querySelector('#tabelaNota tbody');
-      tbody.innerHTML = '';
-      itensNota.forEach(item=>{
-        let sub=item.valor*item.quantidade;
-        tbody.innerHTML += `<tr>
-          <td>${item.codigo}</td><td>${item.nome}</td>
-          <td style="text-align:right;">${item.valor.toFixed(2)}</td>
-          <td style="text-align:center;">${item.quantidade}</td>
-          <td style="text-align:right;">${sub.toFixed(2)}</td></tr>`;
-      });
-    }
-    function adicionarItemNota(){
-      let c=document.getElementById('selProduto').value;
-      let q=parseInt(document.getElementById('qtdNota').value);
-      if(!c){mostrarMsg('Escolha um produto.',false);return;}
-      if(isNaN(q)||q<1){mostrarMsg('Quantidade inválida.',false);return;}
-      let prod = produtos.find(p=>p.codigo===c);
-      if(!prod){mostrarMsg('Produto não existe.',false);return;}
-      let it = itensNota.find(i=>i.codigo===c);
-      if(it) it.quantidade+=q;
-      else itensNota.push({codigo:c,nome:prod.nome,valor:prod.valor,quantidade:q});
-      atualizarNota();
-      document.getElementById('btnEmitirNota').disabled = !(itensNota.length && document.getElementById('selCliente').value);
-      mostrarMsg('Item adicionado na nota!');
-    }
-
-    function emitirNota(){
-      if(!itensNota.length){mostrarMsg('Não há itens na nota.',false);return;}
-      let cli = clientes[document.getElementById('selCliente').value];
-      if(!cli){mostrarMsg('Selecione um cliente.',false);return;}
-      const dt = new Date();
-      let nf = '';
-      nf+=`PALMAS AUTO PEÇAS - NOTA FISCAL\n`;
-      nf+=`Data: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}\n`;
-      nf+=`Cliente: ${cli.nome}\nCPF/CNPJ: ${cli.cpfcnpj}\nEnd: ${cli.endereco}\n\n`;
-      nf+=`Itens:\nCódigo | Produto             | Valor  | Qtde | Subtotal\n`;
-      nf+=`--------------------------------------------------------\n`;
-      let total=0;
-      itensNota.forEach(item=>{
-        let sub=item.valor*item.quantidade;
-        total+=sub;
-        nf+=`${item.codigo.padEnd(6)} | ${item.nome.padEnd(18)} | ${item.valor.toFixed(2).padStart(6)} | ${item.quantidade.toString().padStart(4)} | ${sub.toFixed(2).padStart(7)}\n`;
-      });
-      nf+=`--------------------------------------------------------\nTOTAL: ${total.toFixed(2)}\n\nObrigado!`;
-      document.getElementById('notaEmitida').textContent=nf;
-      document.getElementById('notaEmitida').classList.remove('hidden');
-      document.getElementById('btnImprimirNota').classList.remove('hidden');
-      document.getElementById('btnDownloadPDF').classList.remove('hidden');
-      mostrarMsg('Nota emitida com sucesso!');
-    }
-
-    function limparNota(){
-      itensNota=[];
-      atualizarNota();
-      document.getElementById('notaEmitida').classList.add('hidden');
-      document.getElementById('btnImprimirNota').classList.add('hidden');
-      document.getElementById('btnDownloadPDF').classList.add('hidden');
-      document.getElementById('btnEmitirNota').disabled = true;
-    }
-
-    async function baixarPDF(){
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      let texto = document.getElementById('notaEmitida').textContent;
-      doc.setFont('Courier','normal');
-      doc.setFontSize(12);
-      let linhas = doc.splitTextToSize(texto,180);
-      doc.text(linhas,10,10);
-      doc.save('nota-fiscal.pdf');
-    }
-
-    function atualizarTudo(){
       atualizarTabelaProdutos();
-      atualizarTabelaClientes();
-      atualizarProdutoClienteSelects();
-    }
-    function atualizarProdutoClienteSelects(){
-      let sp=document.getElementById('selProduto');
-      let sc=document.getElementById('selCliente');
-      sp.innerHTML='<option value="">-- selecione --</option>';
-      produtos.forEach(p=> sp.innerHTML+=`<option value="${p.codigo}">${p.codigo} - ${p.nome}</option>`);
-      sc.innerHTML='<option value="">-- selecione --</option>';
-      clientes.forEach((c,i)=> sc.innerHTML+=`<option value="${i}">${c.nome}</option>`);
+    };
+
+    function entrar() {
+      document.querySelector('.login').style.display = 'none';
+      document.querySelector('.painel').style.display = 'block';
     }
 
-    document.getElementById('selCliente').addEventListener('change',()=>{
-      document.getElementById('btnEmitirNota').disabled = !(itensNota.length && document.getElementById('selCliente').value);
-    });
+    function mostrarCadastroCliente() {
+      ocultarTelas();
+      document.getElementById('cadastroCliente').style.display = 'block';
+    }
+
+    function mostrarCadastroProduto() {
+      ocultarTelas();
+      document.getElementById('cadastroProduto').style.display = 'block';
+      atualizarTabelaProdutos();
+    }
+
+    function mostrarNotaFiscal() {
+      ocultarTelas();
+      document.querySelector('.nota-fiscal').style.display = 'block';
+      document.getElementById('dataHora').value = new Date().toLocaleString();
+      atualizarSelects();
+      atualizarTabelaNota();
+    }
+
+    function mostrarRelatorio() {
+      ocultarTelas();
+      document.querySelector('.relatorios').style.display = 'block';
+    }
+
+    function ocultarTelas() {
+      document.querySelectorAll('.cadastro, .nota-fiscal, .relatorios').forEach(e => e.style.display = 'none');
+    }
+
+    function salvarCliente() {
+      const nome = document.getElementById('clienteNome').value;
+      const cpf = document.getElementById('clienteCPF').value;
+      const endereco = document.getElementById('clienteEndereco').value;
+      if (nome && cpf && endereco) {
+        clientes.push({ nome, cpf, endereco });
+        alert('Cliente salvo!');
+      }
+    }
+
+    function salvarProduto() {
+      const nome = document.getElementById('produtoNome').value;
+      const valor = parseFloat(document.getElementById('produtoValor').value);
+      const codigo = (produtos.length + 1).toString().padStart(2, '0');
+      produtos.push({ nome, valor, codigo });
+      atualizarTabelaProdutos();
+    }
+
+    function atualizarTabelaProdutos() {
+      const tabela = document.getElementById('tabelaProdutos');
+      tabela.innerHTML = '<tr><th>Código</th><th>Nome</th><th>Valor</th><th>Ação</th></tr>';
+      produtos.forEach((p, i) => {
+        tabela.innerHTML += `<tr><td>${p.codigo}</td><td>${p.nome}</td><td>R$ ${p.valor.toFixed(2)}</td><td><button onclick="excluirProduto(${i})">Excluir</button></td></tr>`;
+      });
+    }
+
+    function excluirProduto(index) {
+      produtos.splice(index, 1);
+      atualizarTabelaProdutos();
+    }
+
+    function atualizarSelects() {
+      const clienteSel = document.getElementById('clienteSelect');
+      clienteSel.innerHTML = '';
+      clientes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = c.nome;
+        clienteSel.appendChild(opt);
+      });
+
+      const prodSel = document.getElementById('produtoSelect');
+      prodSel.innerHTML = '';
+      produtos.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.nome;
+        opt.textContent = `${p.codigo} - ${p.nome}`;
+        prodSel.appendChild(opt);
+      });
+    }
+
+    function adicionarItem() {
+      const nome = document.getElementById('produtoSelect').value;
+      const quantidade = parseInt(document.getElementById('quantidade').value);
+      const desconto = parseFloat(document.getElementById('desconto').value || 0);
+      const frete = parseFloat(document.getElementById('frete').value || 0);
+      const produto = produtos.find(p => p.nome === nome);
+      const subtotal = produto.valor * quantidade;
+      const imposto = subtotal * 0.12; // 12%
+      const total = subtotal + imposto + frete - desconto;
+      notaItens.push({ ...produto, quantidade, imposto, desconto, frete, total });
+      atualizarTabelaNota();
+    }
+
+    function atualizarTabelaNota() {
+      const tabela = document.getElementById('tabelaNota');
+      tabela.innerHTML = '<tr><th>Produto</th><th>Qtd</th><th>Imposto</th><th>Desconto</th><th>Frete</th><th>Total</th></tr>';
+      notaItens.forEach(item => {
+        tabela.innerHTML += `<tr><td>${item.nome}</td><td>${item.quantidade}</td><td>R$ ${item.imposto.toFixed(2)}</td><td>R$ ${item.desconto.toFixed(2)}</td><td>R$ ${item.frete.toFixed(2)}</td><td>R$ ${item.total.toFixed(2)}</td></tr>`;
+      });
+    }
+
+    function gerarPDF() {
+      html2pdf().from(document.querySelector('.nota-fiscal')).save('nota_fiscal.pdf');
+    }
   </script>
 </body>
 </html>
