@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let produtos = [];
 
-    // Função para calcular o total da nota fiscal
     function calcularTotais() {
         let total = 0;
         let icms = 0;
@@ -18,19 +17,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         produtos.forEach(produto => {
             total += produto.quantidade * produto.precoUnitario;
-            icms += produto.quantidade * produto.precoUnitario * 0.18; // ICMS 18%
+            icms += produto.quantidade * produto.precoUnitario * 0.18;
         });
 
-        desconto = total * 0.05; // Exemplo de desconto de 5%
+        desconto = total * 0.05; 
 
         valorTotalElement.textContent = total.toFixed(2);
         valorIcmsElement.textContent = icms.toFixed(2);
         valorDescontoElement.textContent = desconto.toFixed(2);
     }
 
-    // Função para atualizar a tabela de produtos
     function atualizarTabela() {
-        tabelaProdutos.innerHTML = ""; // Limpar tabela antes de adicionar os novos produtos
+        tabelaProdutos.innerHTML = "";
         produtos.forEach((produto, index) => {
             const row = tabelaProdutos.insertRow();
             row.insertCell(0).textContent = produto.descricao;
@@ -49,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Função para adicionar um produto
-    function adicionarProduto() {
+   {
         const descricao = prompt("Digite a descrição do produto:");
         const quantidade = parseInt(prompt("Digite a quantidade do produto:"));
         const precoUnitario = parseFloat(prompt("Digite o preço unitário do produto:"));
