@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nota Fiscal</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="nota-fiscal">
@@ -13,7 +13,6 @@
             <p class="data">Data de Emissão: <span id="data-emissao"></span></p>
         </header>
 
-        <!-- Seção de Emitente -->
         <section class="dados-emitente">
             <h2>Emitente</h2>
             <p><strong>CNPJ:</strong> <span id="cnpj-emitente">12.345.678/0001-95</span></p>
@@ -21,7 +20,6 @@
             <p><strong>Endereço:</strong> Rua Teste, 100 - Centro - São Paulo, SP</p>
         </section>
 
-        <!-- Seção de Destinatário -->
         <section class="dados-destinatario">
             <h2>Destinatário</h2>
             <input type="text" id="nome-destinatario" placeholder="Nome do Destinatário">
@@ -30,7 +28,6 @@
 
         </section>
 
-        <!-- Tabela de Produtos -->
         <section class="produtos">
             <h2>Produtos</h2>
             <table id="tabela-produtos">
@@ -45,13 +42,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Produtos serão adicionados aqui -->
+                    
                 </tbody>
             </table>
             <button id="adicionar-produto">Adicionar Produto</button>
         </section>
 
-        <!-- Totais -->
         <section class="totais">
             <h2>Totais</h2>
             <p><strong>Valor Total:</strong> R$ <span id="valor-total">0,00</span></p>
