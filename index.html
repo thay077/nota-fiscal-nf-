@@ -18,6 +18,7 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px #a3c0ff;
+    min-height: 600px;
   }
   h1, h2 {
     color: #2a6ebb;
@@ -92,6 +93,16 @@
     <input type="password" id="pass" placeholder="Digite a senha" />
     <button onclick="login()">Entrar</button>
     <p id="loginMsg" style="color: red;"></p>
+
+    <h2>Usuários Cadastrados</h2>
+    <table>
+      <thead>
+        <tr><th>Usuário</th><th>Senha</th></tr>
+      </thead>
+      <tbody id="usuariosTabelaLogin">
+        <!-- Será preenchido por JS -->
+      </tbody>
+    </table>
   </div>
 
   <!-- Tela principal -->
@@ -155,7 +166,7 @@
 </div>
 
 <script>
-  // Usuários fixos
+  // Usuários fixos (apenas para exibição)
   const usuarios = [
     { usuario: "admin", senha: "1234" },
     { usuario: "user1", senha: "abcd" },
@@ -164,27 +175,43 @@
 
   let produtos = [];
 
+  // Preenche a tabela de usuários na tela de login
+  function mostrarUsuariosTabelaLogin() {
+    const tbody = document.getElementById("usuariosTabelaLogin");
+    tbody.innerHTML = "";
+    usuarios.forEach(u => {
+      const tr = document.createElement("tr");
+      const tdUser = document.createElement("td");
+      tdUser.textContent = u.usuario;
+      const tdPass = document.createElement("td");
+      tdPass.textContent = u.senha;
+      tr.appendChild(tdUser);
+      tr.appendChild(tdPass);
+      tbody.appendChild(tr);
+    });
+  }
+
   function login() {
     const userInput = document.getElementById("user").value.trim();
-    const passInput = document.getElementById("pass").value;
+    const passInput = document.getElementById("pass").value.trim();
 
-    const userValid = usuarios.find(u => u.usuario === userInput && u.senha === passInput);
-
-    if (userValid) {
-      document.getElementById("loginMsg").innerText = "";
-      document.getElementById("loginScreen").classList.add("hidden");
-      document.getElementById("mainScreen").classList.remove("hidden");
-      document.getElementById("userNameDisplay").innerText = userValid.usuario;
-      showSection("nota");
-    } else {
-      document.getElementById("loginMsg").innerText = "Usuário ou senha incorretos!";
+    if (!userInput || !passInput) {
+      document.getElementById("loginMsg").innerText = "Digite usuário e senha para continuar.";
+      return;
     }
+
+    // Aceita qualquer usuário e senha, não valida contra lista
+
+    document.getElementById("loginMsg").innerText = "";
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("mainScreen").classList.remove("hidden");
+    document.getElementById("userNameDisplay").innerText = userInput;
+    showSection("nota");
   }
 
   function logout() {
     document.getElementById("loginScreen").classList.remove("hidden");
     document.getElementById("mainScreen").classList.add("hidden");
-    // limpa campos
     document.getElementById("user").value = "";
     document.getElementById("pass").value = "";
   }
@@ -216,7 +243,6 @@
       return;
     }
 
-    // Converter valor para número
     const valor = parseFloat(valorStr.replace(",", "."));
     if (isNaN(valor)) {
       alert("Valor inválido.");
@@ -224,8 +250,6 @@
     }
 
     const total = quantidade * valor;
-
-    // Data e hora atual formatada
     const agora = new Date();
     const dataHora = agora.toLocaleString('pt-BR');
 
@@ -239,43 +263,40 @@
       <p><b>Endereço:</b> ${endereco}</p>
       <p><b>Produto:</b> ${produto}</p>
       <p><b>Quantidade:</b> ${quantidade}</p>
-      <p><b>Valor Unitário:</b> R$ ${valor.toFixed(2).replace(".", ",")}</p>
-      <p><b>Total:</b> R$ ${total.toFixed(2).replace(".", ",")}</p>
+      <p><b>Valor Unitário:</b> R$ ${valor.toFixed(2)}</p>
+      <p><b>Total:</b> R$ ${total.toFixed(2)}</p>
     `;
 
-    const notaDiv = document.getElementById("notaEmitida");
-    notaDiv.innerHTML = notaHtml;
-    notaDiv.classList.remove("hidden");
+    const divNota = document.getElementById("notaEmitida");
+    divNota.innerHTML = notaHtml;
+    divNota.classList.remove("hidden");
   }
 
   function adicionarProduto() {
-    const prodInput = document.getElementById("novoProduto");
-    const prodNome = prodInput.value.trim();
-    if (!prodNome) {
-      alert("Digite o nome do produto para adicionar.");
-      return;
+    const novoProd = document.getElementById("novoProduto").value.trim();
+    if (novoProd) {
+      produtos.push(novoProd);
+      document.getElementById("novoProduto").value = "";
+      atualizarTabelaProdutos();
     }
-    produtos.push(prodNome);
-    prodInput.value = "";
-    atualizarTabelaProdutos();
   }
 
   function atualizarTabelaProdutos() {
     const tbody = document.querySelector("#tabelaProdutos tbody");
     tbody.innerHTML = "";
-    if (produtos.length === 0) {
-      tbody.innerHTML = `<tr><td><i>Nenhum produto cadastrado.</i></td></tr>`;
-      return;
-    }
-    produtos.forEach((p) => {
+    produtos.forEach(prod => {
       const tr = document.createElement("tr");
       const td = document.createElement("td");
-      td.textContent = p;
+      td.textContent = prod;
       tr.appendChild(td);
       tbody.appendChild(tr);
     });
   }
+
+  // Inicializa a tabela de usuários na tela de login
+  mostrarUsuariosTabelaLogin();
 </script>
 
 </body>
 </html>
+
