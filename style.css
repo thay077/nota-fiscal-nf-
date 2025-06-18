@@ -1,11 +1,10 @@
-/* Resetando margens e padding padrão */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Corpo da página */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     background-color: #060af5c9; /* Fundo azul */
@@ -23,10 +22,8 @@ body {
     margin: 0 auto;
     font-size: 14px;
     line-height: 1.6;
-    border: 2px solid #fff; /* Borda branca */
-}
+    border: 2px solid #fff;
 
-/* Cabeçalho */
 header {
     text-align: center;
     margin-bottom: 30px;
@@ -35,7 +32,7 @@ header {
 header h1 {
     font-size: 26px;
     font-weight: bold;
-    color: #d32f2f; /* Vermelho para o título */
+    color: #d32f2f;
 }
 
 header .data {
@@ -43,22 +40,19 @@ header .data {
     color: #888;
 }
 
-/* Seções da nota fiscal */
 section {
     margin-bottom: 30px;
 }
 
-/* Títulos das seções */
 section h2 {
     font-size: 18px;
     font-weight: 600;
-    color: #1976D2; /* Azul para títulos */
+    color: #1976D2;
     margin-bottom: 15px;
-    border-bottom: 2px solid #1976D2; /* Azul para a linha de destaque */
+    border-bottom: 2px solid #1976D2;
     padding-bottom: 5px;
 }
 
-/* Informações gerais e inputs */
 section p, input[type="text"] {
     color: #555;
 }
@@ -71,18 +65,17 @@ input[type="text"] {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-    border: 1px solid #ae0d0d; /* Borda branca para inputs */
+    border: 1px solid #ae0d0d;
     border-radius: 4px;
     font-size: 14px;
     background-color: #fb4040;
 }
 
 input[type="text"]:focus {
-    border-color: #d32f2f; /* Vermelho ao focar */
+    border-color: #d32f2f;
     outline: none;
 }
 
-/* Estilos para a tabela de produtos */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -92,24 +85,24 @@ table {
 table th, table td {
     padding: 12px;
     text-align: left;
-    border: 1px solid #fff; /* Borda branca para a tabela */
+    border: 1px solid #fff;
 }
 
 table th {
-    background-color: #1976D2; /* Azul no cabeçalho da tabela */
+    background-color: #1976D2;
     color: #fff;
     font-weight: 600;
 }
 
 table td {
-    background-color: #fafafa; /* Fundo claro nas células */
+    background-color: #fafafa;
     color: #333;
 }
 
 table td button {
     background-color: transparent;
     border: none;
-    color: #f44336; /* Vermelho para o botão de remover */
+    color: #f44336;
     font-size: 14px;
     cursor: pointer;
     padding: 6px 10px;
@@ -119,9 +112,8 @@ table td button:hover {
     text-decoration: underline;
 }
 
-/* Estilo dos botões */
 button {
-    background-color: #d32f2f; /* Vermelho para os botões */
+    background-color: #d32f2f;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -134,10 +126,9 @@ button {
 }
 
 button:hover {
-    background-color: #c62828; /* Vermelho escuro no hover */
+    background-color: #c62828;
 }
 
-/* Estilo da área de Totais */
 .totais p {
     font-size: 16px;
     font-weight: bold;
@@ -145,11 +136,10 @@ button:hover {
 }
 
 .totais p span {
-    color: #2573c0; /* Azul para os totais */
+    color: #2573c0;
     font-weight: 600;
 }
 
-/* Rodapé */
 footer {
     text-align: center;
     font-size: 14px;
@@ -157,7 +147,6 @@ footer {
     margin-top: 40px;
 }
 
-/* Adicionando um espaço extra na última linha do formulário */
 footer button {
     width: auto;
     max-width: 200px;
