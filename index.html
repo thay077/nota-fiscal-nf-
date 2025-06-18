@@ -1,453 +1,538 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nota Fiscal Automotiva</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #e6f0fa;
-      color: #03396c;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1, h2 {
-      margin: 0 0 15px 0;
-    }
-    .container {
-      background: white;
-      border-radius: 8px;
-      padding: 20px 30px;
-      margin: 20px;
-      width: 90%;
-      max-width: 900px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: 6px 10px;
-      margin-top: 5px;
-      border: 1px solid #b0c4de;
-      border-radius: 4px;
-      font-size: 14px;
-      color: #03396c;
-    }
-    button {
-      margin-top: 15px;
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-    button:hover {
-      background-color: #357ABD;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-    th, td {
-      padding: 8px 10px;
-      border: 1px solid #b0c4de;
-      text-align: center;
-      color: #03396c;
-    }
-    thead {
-      background-color: #cce0ff;
-    }
-    tfoot th {
-      background-color: #cce0ff;
-      text-align: right;
-    }
-    .btn-excluir {
-      background-color: #cc4444;
-      color: white;
-      border: none;
-      padding: 5px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn-excluir:hover {
-      background-color: #aa2222;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PALMAS AUTO PEÇAS - NOTA FISCAL</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    background: #e6f0fa;
+    color: #03396c;
+  }
+  h1, h2 {
+    color: #03396c;
+  }
+  /* LOGIN */
+  #login {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #login form {
+    background: white;
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    width: 320px;
+    text-align: center;
+  }
+  #login label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  #login input[type="text"], #login input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 20px;
+    border: 1.8px solid #b0c4de;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #03396c;
+    transition: border-color 0.3s;
+  }
+  #login input[type="text"]:focus, #login input[type="password"]:focus {
+    border-color: #4a90e2;
+    outline: none;
+  }
+  #login button {
+    width: 100%;
+    padding: 12px 0;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s;
+  }
+  #login button:hover {
+    background-color: #357abd;
+  }
+
+  /* APP PRINCIPAL */
+  #app {
+    display: none;
+    max-width: 900px;
+    margin: 20px auto 40px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  #app h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  section {
+    margin-bottom: 30px;
+  }
+  label {
+    font-weight: 600;
+    margin-top: 10px;
+    display: block;
+    color: #03396c;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 6px;
+    border: 1.8px solid #b0c4de;
+    border-radius: 6px;
+    font-size: 15px;
+    color: #03396c;
+    box-sizing: border-box;
+  }
+  input[type="number"]::-webkit-inner-spin-button, 
+  input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+  button {
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+  }
+  button:hover {
+    background-color: #357abd;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  th, td {
+    border: 1.5px solid #b0c4de;
+    padding: 8px 12px;
+    text-align: left;
+    color: #03396c;
+  }
+  th {
+    background: #d6e4ff;
+  }
+  .btn-excluir {
+    background-color: #e53e3e;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  .btn-excluir:hover {
+    background-color: #b82c2c;
+  }
+  .flex-row {
+    display: flex;
+    gap: 15px;
+  }
+  .flex-col {
+    flex: 1;
+  }
+  /* Responsividade simples */
+  @media(max-width: 600px){
+    #app {
+      margin: 10px;
+      padding: 15px;
     }
     .flex-row {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      flex-direction: column;
     }
-    .flex-50 {
-      flex: 1 1 48%;
-    }
-    .login-container {
-      max-width: 400px;
-      margin-top: 100px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
-<div id="login" class="container login-container">
-  <h2>Login</h2>
-  <label for="inputUsuario">Usuário</label>
-  <input type="text" id="inputUsuario" placeholder="Digite seu usuário" />
-  <label for="inputSenha">Senha</label>
-  <input type="password" id="inputSenha" placeholder="Digite sua senha" />
-  <button onclick="fazerLogin()">Entrar</button>
-
-  <h3 style="margin-top: 25px;">Usuários cadastrados</h3>
-  <table>
-    <thead>
-      <tr><th>Usuário</th><th>Senha</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>admin</td><td>1234</td></tr>
-      <tr><td>usuario1</td><td>senha1</td></tr>
-      <tr><td>usuario2</td><td>senha2</td></tr>
-    </tbody>
-  </table>
+<div id="login">
+  <form onsubmit="return fazerLogin(event)">
+    <h2>PALMAS AUTO PEÇAS - NOTA FISCAL</h2>
+    <label for="inputUsuario">Usuário</label>
+    <input type="text" id="inputUsuario" placeholder="Digite seu usuário" />
+    
+    <label for="inputSenha">Senha</label>
+    <input type="password" id="inputSenha" placeholder="Digite sua senha" />
+    
+    <button type="submit">Entrar</button>
+  </form>
 </div>
 
-<div id="app" class="container hidden">
+<div id="app">
+  <h1>PALMAS AUTO PEÇAS - SISTEMA DE NOTA FISCAL</h1>
 
-  <h1>Nota Fiscal Automotiva</h1>
-
-  <label for="selectUsuario">Usuário emissor:</label>
-  <select id="selectUsuario"></select>
-
-  <hr />
-
-  <div class="flex-row">
-    <div class="flex-50">
-      <h3>Dados da Loja Emitente</h3>
-      <label for="nomeLoja">Nome da Loja</label>
-      <input type="text" id="nomeLoja" placeholder="Nome da loja emitente" />
-
-      <label for="enderecoLoja">Endereço</label>
-      <input type="text" id="enderecoLoja" placeholder="Endereço da loja" />
-
-      <label for="cnpjLoja">CNPJ</label>
-      <input type="text" id="cnpjLoja" placeholder="00.000.000/0000-00" />
+  <!-- Cadastro de Produtos -->
+  <section>
+    <h2>Cadastrar Produto</h2>
+    <div class="flex-row">
+      <div class="flex-col">
+        <label for="codigoProduto">Código (2 dígitos)</label>
+        <input type="text" id="codigoProduto" maxlength="2" placeholder="Ex: 01" />
+      </div>
+      <div class="flex-col">
+        <label for="nomeProduto">Nome do Produto</label>
+        <input type="text" id="nomeProduto" placeholder="Ex: Pastilha de freio" />
+      </div>
     </div>
-
-    <div class="flex-50">
-      <h3>Dados do Cliente</h3>
-      <label for="nomeCliente">Nome do Cliente</label>
-      <input type="text" id="nomeCliente" placeholder="Nome do cliente" />
-
-      <label for="cpfCnpjCliente">CPF ou CNPJ</label>
-      <input type="text" id="cpfCnpjCliente" placeholder="CPF ou CNPJ do cliente" />
-
-      <label for="enderecoCliente">Endereço</label>
-      <input type="text" id="enderecoCliente" placeholder="Endereço do cliente" />
+    <div class="flex-row">
+      <div class="flex-col">
+        <label for="valorProduto">Valor (R$)</label>
+        <input type="text" id="valorProduto" placeholder="Ex: 150.00" />
+      </div>
+      <div class="flex-col">
+        <label for="quantidadeProduto">Quantidade</label>
+        <input type="number" id="quantidadeProduto" min="1" placeholder="Ex: 5" />
+      </div>
     </div>
-  </div>
+    <button onclick="adicionarProduto()">Adicionar Produto</button>
 
-  <hr />
+    <table id="tabelaProdutos">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Produto</th>
+          <th>Valor (R$)</th>
+          <th>Quantidade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Produtos aparecerão aqui -->
+      </tbody>
+    </table>
+  </section>
 
-  <h3>Adicionar Produto</h3>
-  <label for="selectProdutos">Selecione o produto</label>
-  <select id="selectProdutos"></select>
+  <!-- Nota Fiscal -->
+  <section>
+    <h2>Emitir Nota Fiscal</h2>
 
-  <label for="quantidadeProduto">Quantidade</label>
-  <input type="number" id="quantidadeProduto" min="1" value="1" />
+    <div class="flex-row">
+      <div class="flex-col">
+        <label for="nomeCliente">Nome do Cliente</label>
+        <input type="text" id="nomeCliente" placeholder="Ex: João Silva" />
+      </div>
+      <div class="flex-col">
+        <label for="cpfCnpjCliente">CPF ou CNPJ</label>
+        <input type="text" id="cpfCnpjCliente" placeholder="Ex: 000.000.000-00" />
+      </div>
+    </div>
+    <label for="enderecoCliente">Endereço</label>
+    <input type="text" id="enderecoCliente" placeholder="Ex: Rua das Flores, 123" />
 
-  <label for="valorProduto">Valor Unitário (R$)</label>
-  <input type="text" id="valorProduto" placeholder="Exemplo: 150.00" />
+    <label for="selecionarProdutoNota">Selecionar Produto</label>
+    <select id="selecionarProdutoNota">
+      <option value="" disabled selected>-- Escolha o produto --</option>
+    </select>
 
-  <button onclick="adicionarProduto()">Adicionar Produto</button>
+    <label for="quantidadeNota">Quantidade</label>
+    <input type="number" id="quantidadeNota" min="1" value="1" />
 
-  <table id="tabelaProdutos">
-    <thead>
-      <tr>
-        <th>Código</th>
-        <th>Produto</th>
-        <th>Quantidade</th>
-        <th>Valor Unitário (R$)</th>
-        <th>Subtotal (R$)</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-    <tfoot>
-      <tr>
-        <th colspan="5" style="text-align:right">Total:</th>
-        <th id="totalNota">R$ 0,00</th>
-      </tr>
-    </tfoot>
-  </table>
+    <button onclick="adicionarProdutoNota()">Adicionar Produto à Nota</button>
 
-  <hr />
+    <table id="tabelaNota">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Produto</th>
+          <th>Valor Unitário (R$)</th>
+          <th>Quantidade</th>
+          <th>Subtotal (R$)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Itens da nota -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="4" style="text-align:right">TOTAL:</th>
+          <th id="totalNota">0,00</th>
+          <th></th>
+        </tr>
+      </tfoot>
+    </table>
 
-  <button onclick="gerarNota()">Gerar Nota Fiscal</button>
+    <button onclick="emitirNota()">Emitir Nota Fiscal</button>
 
-  <div id="notaFiscal" style="margin-top: 25px;"></div>
+    <div id="notaEmitida" style="margin-top: 20px; background: #d6e4ff; padding: 15px; border-radius: 8px; display:none; color:#03396c;">
+      <!-- Nota fiscal será exibida aqui -->
+    </div>
+  </section>
+
 </div>
 
 <script>
-  // Usuários fixos para a tabela e select
-  const usuarios = [
-    { usuario: "admin", senha: "1234" },
-    { usuario: "usuario1", senha: "senha1" },
-    { usuario: "usuario2", senha: "senha2" },
-  ];
+  // Variáveis globais
+  let produtos = [];
+  let itensNota = [];
 
-  // Produtos fixos para seleção - peças para carro e moto
-  const produtosDisponiveis = [
-    "Óleo Motor 5W30",
-    "Filtro de Óleo",
-    "Filtro de Ar",
-    "Velas de Ignição",
-    "Pastilhas de Freio",
-    "Disco de Freio",
-    "Bateria 12V",
-    "Correia Dentada",
-    "Amortecedor",
-    "Lanterna Traseira",
-    "Pneu 205/55 R16",
-    "Cabo de Embreagem",
-    "Escapamento",
-    "Farol Dianteiro",
-    "Bomba de Combustível",
-    "Filtro de Combustível",
-    "Câmbio",
-    "Embreagem",
-    "Pneu Moto 120/70",
-    "Capacete",
-    "Protetor de Motor",
-    "Farol de Moto",
-    "Freio a Disco de Moto",
-    "Corrente para Moto",
-  ];
+  // Login - aceita qualquer usuário/senha
+  function fazerLogin(event){
+    event.preventDefault();
+    const usuario = document.getElementById("inputUsuario").value.trim();
+    const senha = document.getElementById("inputSenha").value.trim();
 
-  let produtosNota = [];
-
-  // Popula o select de usuários
-  function popularUsuarios() {
-    const select = document.getElementById("selectUsuario");
-    select.innerHTML = "";
-    usuarios.forEach(u => {
-      const option = document.createElement("option");
-      option.value = u.usuario;
-      option.textContent = u.usuario;
-      select.appendChild(option);
-    });
-  }
-
-  // Popula o select de produtos
-  function popularProdutos() {
-    const select = document.getElementById("selectProdutos");
-    select.innerHTML = "";
-    produtosDisponiveis.forEach(prod => {
-      const option = document.createElement("option");
-      option.value = prod;
-      option.textContent = prod;
-      select.appendChild(option);
-    });
-  }
-
-  // Função para login (qualquer usuário e senha aceitos)
-  function fazerLogin() {
-    const usuarioInput = document.getElementById("inputUsuario").value.trim();
-    const senhaInput = document.getElementById("inputSenha").value.trim();
-
-    if (usuarioInput === "" || senhaInput === "") {
+    if(usuario === "" || senha === ""){
       alert("Por favor, preencha usuário e senha.");
+      return false;
+    }
+    // esconder login, mostrar app
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    return false;
+  }
+
+  // Adicionar produto na lista
+  function adicionarProduto(){
+    const codigo = document.getElementById("codigoProduto").value.trim();
+    const nome = document.getElementById("nomeProduto").value.trim();
+    let valor = document.getElementById("valorProduto").value.trim();
+    let quantidade = document.getElementById("quantidadeProduto").value.trim();
+
+    if(codigo.length !== 2 || isNaN(Number(codigo))){
+      alert("Código deve ter 2 dígitos numéricos.");
       return;
     }
-    // Não faz validação de senha, aceita qualquer um.
+    if(nome === ""){
+      alert("Informe o nome do produto.");
+      return;
+    }
+    // substituir vírgula por ponto para valor
+    valor = valor.replace(",",".");
+    if(valor === "" || isNaN(Number(valor)) || Number(valor) <= 0){
+      alert("Informe um valor válido maior que zero.");
+      return;
+    }
+    quantidade = Number(quantidade);
+    if(quantidade <= 0 || isNaN(quantidade)){
+      alert("Informe uma quantidade válida maior que zero.");
+      return;
+    }
 
-    // Esconde tela login e mostra app
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
+    // Verifica se código já existe, atualizar ou rejeitar
+    const idx = produtos.findIndex(p => p.codigo === codigo);
+    if(idx >= 0){
+      alert("Código já cadastrado!");
+      return;
+    }
 
-    popularUsuarios();
-    popularProdutos();
+    produtos.push({codigo, nome, valor: Number(valor), quantidade});
+    atualizarTabelaProdutos();
+    atualizarSelectProdutos();
+
+    // limpar campos
+    document.getElementById("codigoProduto").value = "";
+    document.getElementById("nomeProduto").value = "";
+    document.getElementById("valorProduto").value = "";
+    document.getElementById("quantidadeProduto").value = "";
   }
 
-  // Atualiza a tabela de produtos na nota
-  function atualizarTabelaProdutos() {
+  // Atualiza tabela de produtos
+  function atualizarTabelaProdutos(){
     const tbody = document.querySelector("#tabelaProdutos tbody");
     tbody.innerHTML = "";
 
-    let total = 0;
-    produtosNota.forEach((item, index) => {
+    produtos.forEach((p, i) => {
       const tr = document.createElement("tr");
 
-      const codigo = String(index + 1).padStart(2, "0");
-      const tdCodigo = document.createElement("td");
-      tdCodigo.textContent = codigo;
-      tr.appendChild(tdCodigo);
-
-      const tdProduto = document.createElement("td");
-      tdProduto.textContent = item.produto;
-      tr.appendChild(tdProduto);
-
-      const tdQuantidade = document.createElement("td");
-      tdQuantidade.textContent = item.quantidade;
-      tr.appendChild(tdQuantidade);
-
-      const tdValor = document.createElement("td");
-      tdValor.textContent = item.valor.toFixed(2).replace(".", ",");
-      tr.appendChild(tdValor);
-
-      const subtotal = item.quantidade * item.valor;
-      total += subtotal;
-      const tdSubtotal = document.createElement("td");
-      tdSubtotal.textContent = subtotal.toFixed(2).replace(".", ",");
-      tr.appendChild(tdSubtotal);
-
-      const tdAcao = document.createElement("td");
-      const btnExcluir = document.createElement("button");
-      btnExcluir.textContent = "Excluir";
-      btnExcluir.className = "btn-excluir";
-      btnExcluir.onclick = () => {
-        produtosNota.splice(index, 1);
-        atualizarTabelaProdutos();
-      };
-      tdAcao.appendChild(btnExcluir);
-      tr.appendChild(tdAcao);
+      tr.innerHTML = `
+        <td>${p.codigo}</td>
+        <td>${p.nome}</td>
+        <td>${p.valor.toFixed(2).replace(".",",")}</td>
+        <td>${p.quantidade}</td>
+        <td><button class="btn-excluir" onclick="excluirProduto('${p.codigo}')">Excluir</button></td>
+      `;
 
       tbody.appendChild(tr);
     });
-
-    document.getElementById("totalNota").textContent =
-      "R$ " + total.toFixed(2).replace(".", ",");
   }
 
-  // Adiciona produto selecionado à tabela da nota
-  function adicionarProduto() {
-    const produto = document.getElementById("selectProdutos").value;
-    const quantidade = parseInt(document.getElementById("quantidadeProduto").value);
-    const valorText = document.getElementById("valorProduto").value.replace(",", ".");
-    const valor = parseFloat(valorText);
+  // Atualiza select de produtos para a nota fiscal
+  function atualizarSelectProdutos(){
+    const select = document.getElementById("selecionarProdutoNota");
+    select.innerHTML = `<option value="" disabled selected>-- Escolha o produto --</option>`;
+    produtos.forEach(p => {
+      select.innerHTML += `<option value="${p.codigo}">${p.codigo} - ${p.nome}</option>`;
+    });
+  }
 
-    if (!produto) {
+  // Excluir produto da lista
+  function excluirProduto(codigo){
+    if(confirm("Confirma exclusão do produto?")){
+      produtos = produtos.filter(p => p.codigo !== codigo);
+      atualizarTabelaProdutos();
+      atualizarSelectProdutos();
+      // Também remover da nota se tiver
+      itensNota = itensNota.filter(item => item.codigo !== codigo);
+      atualizarTabelaNota();
+    }
+  }
+
+  // Adicionar produto na nota fiscal
+  function adicionarProdutoNota(){
+    const codigo = document.getElementById("selecionarProdutoNota").value;
+    let quantidade = Number(document.getElementById("quantidadeNota").value);
+
+    if(!codigo){
       alert("Selecione um produto.");
       return;
     }
-    if (isNaN(quantidade) || quantidade <= 0) {
-      alert("Informe uma quantidade válida.");
-      return;
-    }
-    if (isNaN(valor) || valor <= 0) {
-      alert("Informe um valor válido.");
+    if(quantidade <= 0 || isNaN(quantidade)){
+      alert("Informe uma quantidade válida maior que zero.");
       return;
     }
 
-    produtosNota.push({ produto, quantidade, valor });
-    atualizarTabelaProdutos();
-
-    // Limpa quantidade e valor para facilitar próximo cadastro
-    document.getElementById("quantidadeProduto").value = 1;
-    document.getElementById("valorProduto").value = "";
+    const produto = produtos.find(p => p.codigo === codigo);
+    if(!produto){
+      alert("Produto não encontrado.");
+      return;
+    }
+    // Verificar se já está na nota, somar quantidade
+    const idx = itensNota.findIndex(item => item.codigo === codigo);
+    if(idx >= 0){
+      itensNota[idx].quantidade += quantidade;
+    } else {
+      itensNota.push({
+        codigo: produto.codigo,
+        nome: produto.nome,
+        valor: produto.valor,
+        quantidade: quantidade
+      });
+    }
+    atualizarTabelaNota();
   }
 
-  // Gera a nota fiscal em HTML com os dados preenchidos
-  function gerarNota() {
-    if (produtosNota.length === 0) {
-      alert("Adicione ao menos um produto antes de gerar a nota.");
+  // Atualizar tabela da nota fiscal
+  function atualizarTabelaNota(){
+    const tbody = document.querySelector("#tabelaNota tbody");
+    tbody.innerHTML = "";
+
+    let total = 0;
+    itensNota.forEach((item, i) => {
+      const subtotal = item.valor * item.quantidade;
+      total += subtotal;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.codigo}</td>
+        <td>${item.nome}</td>
+        <td>${item.valor.toFixed(2).replace(".",",")}</td>
+        <td>${item.quantidade}</td>
+        <td>${subtotal.toFixed(2).replace(".",",")}</td>
+        <td><button class="btn-excluir" onclick="removerItemNota(${i})">Excluir</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("totalNota").textContent = total.toFixed(2).replace(".",",");
+  }
+
+  // Remover item da nota fiscal
+  function removerItemNota(index){
+    itensNota.splice(index,1);
+    atualizarTabelaNota();
+  }
+
+  // Emitir nota fiscal
+  function emitirNota(){
+    if(itensNota.length === 0){
+      alert("Adicione pelo menos um produto na nota.");
       return;
     }
-
-    const nomeLoja = document.getElementById("nomeLoja").value.trim();
-    const enderecoLoja = document.getElementById("enderecoLoja").value.trim();
-    const cnpjLoja = document.getElementById("cnpjLoja").value.trim();
 
     const nomeCliente = document.getElementById("nomeCliente").value.trim();
-    const cpfCnpjCliente = document.getElementById("cpfCnpjCliente").value.trim();
-    const enderecoCliente = document.getElementById("enderecoCliente").value.trim();
+    const cpfCnpj = document.getElementById("cpfCnpjCliente").value.trim();
+    const endereco = document.getElementById("enderecoCliente").value.trim();
 
-    if (!nomeLoja || !nomeCliente) {
-      alert("Preencha ao menos o nome da loja e do cliente.");
+    if(!nomeCliente || !cpfCnpj || !endereco){
+      alert("Preencha os dados do cliente.");
       return;
     }
 
-    const usuarioEmissor = document.getElementById("selectUsuario").value;
-
     const agora = new Date();
-    const dataStr = agora.toLocaleDateString('pt-BR');
-    const horaStr = agora.toLocaleTimeString('pt-BR');
+    const dataStr = agora.toLocaleDateString("pt-BR");
+    const horaStr = agora.toLocaleTimeString("pt-BR");
 
-    // Monta HTML da nota
-    let html = `
-      <div style="border: 2px solid #4a90e2; border-radius: 8px; padding: 20px; background: #f0f8ff;">
-        <h2 style="color:#03396c; margin-top:0;">Nota Fiscal</h2>
-        <p><strong>Emitida em:</strong> ${dataStr} às ${horaStr}</p>
-        <p><strong>Emitente:</strong> ${usuarioEmissor}</p>
+    let total = 0;
+    itensNota.forEach(item => total += item.valor * item.quantidade);
 
-        <h3>Dados da Loja Emitente</h3>
-        <p><strong>Nome:</strong> ${nomeLoja}</p>
-        <p><strong>Endereço:</strong> ${enderecoLoja}</p>
-        <p><strong>CNPJ:</strong> ${cnpjLoja}</p>
-
-        <h3>Dados do Cliente</h3>
-        <p><strong>Nome:</strong> ${nomeCliente}</p>
-        <p><strong>CPF/CNPJ:</strong> ${cpfCnpjCliente}</p>
-        <p><strong>Endereço:</strong> ${enderecoCliente}</p>
-
-        <h3>Produtos</h3>
-        <table style="width:100%; border-collapse: collapse;" border="1">
-          <thead style="background-color: #cce0ff;">
-            <tr>
-              <th>Código</th>
-              <th>Produto</th>
-              <th>Quantidade</th>
-              <th>Valor Unitário (R$)</th>
-              <th>Subtotal (R$)</th>
-            </tr>
-          </thead>
-          <tbody>
+    // Gerar HTML da nota
+    let htmlNota = `
+      <h3>Nota Fiscal - PALMAS AUTO PEÇAS</h3>
+      <p><strong>Data:</strong> ${dataStr} <strong>Hora:</strong> ${horaStr}</p>
+      <p><strong>Cliente:</strong> ${nomeCliente}</p>
+      <p><strong>CPF/CNPJ:</strong> ${cpfCnpj}</p>
+      <p><strong>Endereço:</strong> ${endereco}</p>
+      <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+        <thead>
+          <tr style="background:#d6e4ff; border: 1.5px solid #b0c4de;">
+            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Código</th>
+            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Produto</th>
+            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Valor Unitário (R$)</th>
+            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Quantidade</th>
+            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Subtotal (R$)</th>
+          </tr>
+        </thead>
+        <tbody>
     `;
-
-    let totalNota = 0;
-    produtosNota.forEach((item, i) => {
-      const codigo = String(i + 1).padStart(2, "0");
-      const subtotal = item.quantidade * item.valor;
-      totalNota += subtotal;
-
-      html += `
+    itensNota.forEach(item => {
+      const subtotal = item.valor * item.quantidade;
+      htmlNota += `
         <tr>
-          <td style="text-align:center;">${codigo}</td>
-          <td>${item.produto}</td>
-          <td style="text-align:center;">${item.quantidade}</td>
-          <td style="text-align:right;">R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
-          <td style="text-align:right;">R$ ${subtotal.toFixed(2).replace('.', ',')}</td>
+          <td style="border: 1.5px solid #b0c4de; padding: 6px;">${item.codigo}</td>
+          <td style="border: 1.5px solid #b0c4de; padding: 6px;">${item.nome}</td>
+          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${item.valor.toFixed(2).replace(".",",")}</td>
+          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:center;">${item.quantidade}</td>
+          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${subtotal.toFixed(2).replace(".",",")}</td>
         </tr>
       `;
     });
 
-    html += `
-          </tbody>
-          <tfoot>
-            <tr style="background-color: #cce0ff;">
-              <th colspan="4" style="text-align:right;">Total:</th>
-              <th style="text-align:right;">R$ ${totalNota.toFixed(2).replace('.', ',')}</th>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+    htmlNota += `
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" style="text-align:right; border: 1.5px solid #b0c4de; padding: 6px;">TOTAL:</th>
+            <th style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${total.toFixed(2).replace(".",",")}</th>
+          </tr>
+        </tfoot>
+      </table>
+      <p style="margin-top:15px;">Obrigado pela preferência!</p>
     `;
 
-    document.getElementById("notaFiscal").innerHTML = html;
+    const divNota = document.getElementById("notaEmitida");
+    divNota.innerHTML = htmlNota;
+    divNota.style.display = "block";
+
+    // Limpar dados da nota
+    itensNota = [];
+    atualizarTabelaNota();
+
+    // Limpar cliente
+    document.getElementById("nomeCliente").value = "";
+    document.getElementById("cpfCnpjCliente").value = "";
+    document.getElementById("enderecoCliente").value = "";
+    document.getElementById("selecionarProdutoNota").value = "";
+    document.getElementById("quantidadeNota").value = 1;
   }
 </script>
 
