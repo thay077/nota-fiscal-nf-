@@ -6,174 +6,90 @@
   <title>PALMAS AUTO PEÇAS - NOTA FISCAL</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    /* Reset básico */
-    * {
-      box-sizing: border-box;
-    }
+    /* -- Estilos gerais -- */
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5faff;
-      margin: 0;
-      color: #003366;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      background: #f5faff; margin: 0; color: #003366;
+      display: flex; flex-direction: column; min-height: 100vh;
     }
     h1 {
-      background-color: #007acc;
-      color: white;
-      margin: 0;
-      padding: 20px 0;
-      text-align: center;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      background: #007acc; color: white; margin: 0;
+      padding: 20px; text-align: center; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .container {
-      flex-grow: 1;
-      max-width: 900px;
-      margin: 25px auto;
-      background: white;
-      padding: 25px 30px;
+      flex-grow: 1; max-width: 900px; margin: 25px auto;
+      background: white; padding: 25px 30px;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 122, 204, 0.2);
+      box-shadow: 0 0 15px rgba(0,122,204,0.2);
     }
-    label {
-      display: block;
-      margin: 12px 0 6px;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-    input[type=text], input[type=number], select, input[type=password] {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1.8px solid #7db9e8;
+    label { display: block; margin: 12px 0 6px; font-weight: 600; }
+    input, select, button {
       font-size: 1rem;
-      transition: border-color 0.3s ease;
     }
-    input[type=text]:focus, input[type=number]:focus, select:focus, input[type=password]:focus {
-      outline: none;
-      border-color: #005f99;
-      box-shadow: 0 0 8px #4ca3ddaa;
+    input, select {
+      width: 100%; padding: 10px 12px; border-radius: 6px;
+      border: 1.8px solid #7db9e8;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus {
+      border-color: #005f99; box-shadow: 0 0 8px #4ca3ddaa; outline: none;
     }
     button {
-      background-color: #007acc;
-      color: white;
-      border: none;
-      padding: 12px 22px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 18px;
-      transition: background-color 0.3s ease;
-      box-shadow: 0 3px 7px rgba(0,122,204,0.4);
+      background: #007acc; color: white; border: none;
+      padding: 12px 22px; border-radius: 6px; font-weight: 600;
+      cursor: pointer; margin-top: 18px;
+      transition: background-color 0.3s, opacity 0.3s;
       user-select: none;
     }
-    button:hover:not(:disabled) {
-      background-color: #005f99;
-    }
-    button:disabled {
-      background-color: #a3c7ff;
-      cursor: default;
-      box-shadow: none;
+    button:hover:not(:disabled) { background: #005f99; }
+    button:disabled { background: #a3c7ff; cursor: default; }
+    .btn-group {
+      display: flex; justify-content: center;
+      gap: 18px; margin-bottom: 25px; flex-wrap: wrap;
     }
     table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 18px;
-      font-size: 0.9rem;
-      user-select: none;
+      width: 100%; border-collapse: collapse;
+      margin-top: 18px; font-size: 0.9rem;
     }
     th, td {
-      border: 1.6px solid #a8cdfd;
-      padding: 10px 12px;
-      text-align: left;
+      border: 1.6px solid #a8cdfd; padding: 10px 12px; text-align: left;
     }
     th {
-      background-color: #d0e5ff;
-      font-weight: 700;
-      color: #003366;
+      background: #d0e5ff;
     }
     td button {
-      background-color: #cc3300;
-      font-size: 0.85rem;
-      padding: 6px 10px;
-      border-radius: 4px;
-      box-shadow: none;
-      user-select: none;
+      background: #cc3300; font-size: 0.85rem;
+      padding: 6px 10px; border-radius: 4px;
+      transition: background 0.3s;
     }
-    td button:hover {
-      background-color: #a02700;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .btn-group {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-    .btn-group button {
-      min-width: 160px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      box-shadow: 0 3px 7px rgba(0, 122, 204, 0.5);
-    }
-    #notaEmitida {
-      margin-top: 25px;
-      padding: 20px;
-      border-radius: 10px;
-      border: 1.5px solid #7db9e8;
-      background: #e8f2ff;
-      font-family: 'Courier New', Courier, monospace;
-      white-space: pre-wrap;
-      font-size: 0.9rem;
-      color: #004080;
-      user-select: text;
-      min-height: 240px;
-    }
-    #btnDownloadPdf {
-      margin-top: 15px;
-    }
-    /* Feedback mensagem */
+    td button:hover { background: #a02700; }
+    .hidden { display: none!important; }
     #msgFeedback {
-      position: fixed;
-      bottom: 25px;
-      left: 50%;
+      position: fixed; bottom: 25px; left: 50%;
       transform: translateX(-50%);
-      background-color: #007accdd;
-      color: white;
-      padding: 12px 22px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 1rem;
+      background: #007accdd; color: white;
+      padding: 12px 22px; border-radius: 30px;
+      font-weight: 600; font-size: 1rem;
       box-shadow: 0 4px 10px rgba(0,122,204,0.6);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.5s ease;
-      user-select: none;
+      transition: opacity 0.5s;
       z-index: 9999;
     }
-    #msgFeedback.show {
-      opacity: 1;
-      pointer-events: auto;
+    #msgFeedback.show { opacity: 1; pointer-events: auto; }
+    #notaEmitida {
+      margin-top: 25px; padding: 20px; border-radius: 10px;
+      border: 1.5px solid #7db9e8; background: #e8f2ff;
+      font-family: 'Courier New', monospace; white-space: pre-wrap;
+      font-size: 0.9rem; color: #004080; min-height: 200px;
     }
-    /* Rodapé */
     footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #005f99;
-      padding: 12px 0;
+      text-align: center; font-size: 0.85rem;
+      color: #005f99; padding: 12px 0;
       background: #d0e5ff;
-      user-select: none;
-      font-weight: 600;
-      letter-spacing: 0.02em;
     }
   </style>
 </head>
@@ -181,440 +97,346 @@
 
   <h1>PALMAS AUTO PEÇAS - NOTA FISCAL</h1>
 
+  <!-- LOGIN -->
   <div class="container" id="loginContainer">
     <h2>Login</h2>
     <label for="usuario">Usuário:</label>
-    <input type="text" id="usuario" placeholder="Digite seu usuário" autocomplete="username" />
+    <input type="text" id="usuario" placeholder="Digite seu usuário" />
     <label for="senha">Senha:</label>
-    <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password" />
+    <input type="password" id="senha" placeholder="Digite sua senha" />
     <button onclick="login()">Entrar</button>
   </div>
 
+  <!-- APP PRINCIPAL -->
   <div class="container hidden" id="mainContainer">
 
     <div class="btn-group">
-      <button onclick="mostrarTela('produtosContainer')">Cadastrar Produtos</button>
-      <button onclick="mostrarTela('clientesContainer')">Cadastrar Clientes</button>
-      <button onclick="mostrarTela('notaContainer')">Emitir Nota Fiscal</button>
+      <button onclick="mostrarTela('produtosSection')">Cadastrar Produtos</button>
+      <button onclick="mostrarTela('clientesSection')">Cadastrar Clientes</button>
+      <button onclick="mostrarTela('notaSection')">Emitir Nota Fiscal</button>
     </div>
 
-    <!-- Cadastro Produtos -->
-    <section id="produtosContainer" class="hidden" aria-label="Cadastro de Produtos">
+    <!-- CADASTRO PRODUTOS -->
+    <section id="produtosSection" class="hidden">
       <h2>Cadastro de Produtos</h2>
       <label for="codigoProduto">Código (2 dígitos):</label>
-      <input type="text" id="codigoProduto" maxlength="2" placeholder="Ex: 01" aria-describedby="codigoHelp" />
+      <input type="text" maxlength="2" id="codigoProduto" placeholder="Ex: 01" />
       <label for="nomeProduto">Nome do Produto:</label>
       <input type="text" id="nomeProduto" placeholder="Ex: Filtro de Óleo" />
       <label for="valorProduto">Valor (R$):</label>
-      <input type="number" step="0.01" min="0" id="valorProduto" placeholder="Ex: 99.90" />
-      <button id="btnAddProduto" onclick="adicionarProduto()">Adicionar Produto</button>
-
-      <table id="tabelaProdutos" aria-live="polite" aria-label="Lista de Produtos cadastrados">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Nome</th>
-            <th>Valor (R$)</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Produtos adicionados aparecerão aqui -->
-        </tbody>
+      <input type="number" step="0.01" id="valorProduto" placeholder="Ex: 99.90" />
+      <button onclick="adicionarProduto()">Adicionar Produto</button>
+      <table id="tabelaProdutos">
+        <thead><tr><th>Código</th><th>Nome</th><th>Valor</th><th>Ação</th></tr></thead>
+        <tbody></tbody>
       </table>
+      <div style="margin-top:15px;">
+        <button onclick="exportarDados('produtos')">Exportar Produtos (JSON)</button>
+        <input type="file" id="importProdutos" onchange="importarDados('produtos')">
+      </div>
     </section>
 
-    <!-- Cadastro Clientes -->
-    <section id="clientesContainer" class="hidden" aria-label="Cadastro de Clientes">
+    <!-- CADASTRO CLIENTES -->
+    <section id="clientesSection" class="hidden">
       <h2>Cadastro de Clientes</h2>
-      <label for="nomeClienteCadastro">Nome do Cliente:</label>
-      <input type="text" id="nomeClienteCadastro" placeholder="Nome completo" />
-      <label for="cpfCnpjClienteCadastro">CPF/CNPJ:</label>
-      <input type="text" id="cpfCnpjClienteCadastro" placeholder="CPF ou CNPJ" />
-      <label for="enderecoClienteCadastro">Endereço:</label>
-      <input type="text" id="enderecoClienteCadastro" placeholder="Endereço do cliente" />
-      <button id="btnAddCliente" onclick="adicionarCliente()">Adicionar Cliente</button>
-
-      <table id="tabelaClientes" aria-live="polite" aria-label="Lista de Clientes cadastrados">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>CPF/CNPJ</th>
-            <th>Endereço</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Clientes adicionados aparecerão aqui -->
-        </tbody>
+      <label for="nomeCli">Nome do Cliente:</label>
+      <input type="text" id="nomeCli" placeholder="Ex: João Silva" />
+      <label for="cpfCli">CPF/CNPJ:</label>
+      <input type="text" id="cpfCli" placeholder="000.000.000-00 ou 00.000.000/0000-00" />
+      <label for="endCli">Endereço:</label>
+      <input type="text" id="endCli" placeholder="Rua Exemplo, 123" />
+      <button onclick="adicionarCliente()">Adicionar Cliente</button>
+      <table id="tabelaClientes">
+        <thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Endereço</th><th>Ação</th></tr></thead>
+        <tbody></tbody>
       </table>
+      <div style="margin-top:15px;">
+        <button onclick="exportarDados('clientes')">Exportar Clientes (JSON)</button>
+        <input type="file" id="importClientes" onchange="importarDados('clientes')">
+      </div>
     </section>
 
-    <!-- Emitir Nota Fiscal -->
-    <section id="notaContainer" class="hidden" aria-label="Emitir Nota Fiscal">
+    <!-- EMISSÃO DE NOTA -->
+    <section id="notaSection" class="hidden">
       <h2>Emitir Nota Fiscal</h2>
+      <label for="selCliente">Cliente:</label>
+      <select id="selCliente"><option value="">-- selecione --</option></select>
+      <label for="selProduto">Produto:</label>
+      <select id="selProduto"><option value="">-- selecione --</option></select>
+      <label for="qtdNota">Quantidade:</label>
+      <input type="number" id="qtdNota" value="1" min="1" />
+      <button id="btnAddNota" onclick="adicionarItemNota()">Adicionar à Nota</button>
+      <table id="tabelaNota"><thead>
+        <tr><th>Código</th><th>Produto</th><th>Valor</th><th>Qtde</th><th>Subtotal</th></tr>
+      </thead><tbody></tbody></table>
 
-      <label for="selectClienteNota">Cliente:</label>
-      <select id="selectClienteNota" aria-required="true">
-        <option value="">-- Selecione um cliente --</option>
-      </select>
+      <div style="margin-top:15px;">
+        <button id="btnEmitirNota" onclick="emitirNota()" disabled>Emitir Nota Fiscal</button>
+        <button id="btnImprimirNota" class="hidden" onclick="window.print()">Imprimir Nota</button>
+        <button id="btnDownloadPDF" class="hidden" onclick="baixarPDF()">Baixar PDF</button>
+      </div>
 
-      <label for="selecionarProdutoNota">Produto:</label>
-      <select id="selecionarProdutoNota" aria-required="true">
-        <option value="">-- Selecione um produto --</option>
-      </select>
-
-      <label for="quantidadeNota">Quantidade:</label>
-      <input type="number" id="quantidadeNota" min="1" value="1" />
-
-      <button id="btnAddItemNota" onclick="adicionarItemNota()">Adicionar à Nota</button>
-
-      <table id="tabelaNota" aria-live="polite" aria-label="Itens da Nota Fiscal">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Produto</th>
-            <th style="text-align:right;">Valor Unitário (R$)</th>
-            <th style="text-align:center;">Quantidade</th>
-            <th style="text-align:right;">Subtotal (R$)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Itens da nota aparecem aqui -->
-        </tbody>
-      </table>
-
-      <button id="btnEmitirNota" onclick="emitirNota()" disabled>Emitir Nota Fiscal</button>
-
-      <pre id="notaEmitida" class="hidden" aria-live="polite" aria-label="Nota Fiscal emitida"></pre>
-      <button id="btnDownloadPdf" class="hidden" onclick="baixarPDF()">Baixar Nota Fiscal em PDF</button>
+      <pre id="notaEmitida" class="hidden"></pre>
     </section>
 
   </div>
 
   <div id="msgFeedback"></div>
-
-  <footer>
-    &copy; 2025 Palmas Auto Peças. Todos os direitos reservados.
-  </footer>
+  <footer>&copy; 2025 Palmas Auto Peças</footer>
 
   <script>
-    let produtos = [];
+    let produtos = [
+      {codigo:'01', nome:'Filtro de Óleo', valor:49.90},
+      {codigo:'02', nome:'Pastilha de Freio', valor:129.90},
+      {codigo:'03', nome:'Óleo 5W30', valor:99.50}
+    ];
     let clientes = [];
     let itensNota = [];
 
-    const msgFeedback = document.getElementById('msgFeedback');
+    const msg = document.getElementById('msgFeedback');
 
-    // Exibe mensagens temporárias de feedback
-    function mostrarMensagem(texto, sucesso = true) {
-      msgFeedback.textContent = texto;
-      msgFeedback.style.backgroundColor = sucesso ? '#007accdd' : '#cc3300dd';
-      msgFeedback.classList.add('show');
-      setTimeout(() => msgFeedback.classList.remove('show'), 3500);
+    function mostrarMsg(txt, ok=true){
+      msg.textContent = txt;
+      msg.style.backgroundColor = ok ? '#007accdd' : '#cc3300dd';
+      msg.classList.add('show');
+      setTimeout(()=> msg.classList.remove('show'), 3500);
     }
 
-    function login() {
-      const usuario = document.getElementById('usuario').value.trim();
-      const senha = document.getElementById('senha').value.trim();
-
-      if(usuario === '' || senha === '') {
-        mostrarMensagem('Preencha usuário e senha.', false);
-        return;
-      }
-      // Aqui poderia validar contra um backend; aceita qualquer login
+    function login(){
+      const u=document.getElementById('usuario').value.trim();
+      const s=document.getElementById('senha').value.trim();
+      if(!u||!s){ mostrarMsg('Preencha usuário e senha.', false); return; }
       document.getElementById('loginContainer').classList.add('hidden');
       document.getElementById('mainContainer').classList.remove('hidden');
-      mostrarTela('produtosContainer');
-      carregarProdutosNoSelect();
-      carregarClientesNoSelect();
-      mostrarMensagem('Login efetuado com sucesso!');
+      mostrarTela('produtosSection');
+      atualizarTudo();
+      mostrarMsg('Bem-vindo(a)!');
     }
 
-    function mostrarTela(id) {
-      const telas = ['produtosContainer', 'clientesContainer', 'notaContainer'];
-      telas.forEach(tela => {
-        document.getElementById(tela).classList.toggle('hidden', tela !== id);
+    function mostrarTela(id){
+      ['produtosSection','clientesSection','notaSection'].forEach(sec=>{
+        document.getElementById(sec).classList.toggle('hidden', sec!==id);
       });
-      // Reset mensagens da nota
-      if(id !== 'notaContainer') {
-        limparNota();
+      if(id!=='notaSection') limparNota();
+    }
+
+    /* — Produtos — */
+    function atualizarTabelaProdutos(){
+      const tb=document.querySelector('#tabelaProdutos tbody');
+      tb.innerHTML='';
+      produtos.forEach(p=>{
+        tb.innerHTML+=`<tr>
+          <td>${p.codigo}</td><td>${p.nome}</td><td>${p.valor.toFixed(2)}</td>
+          <td><button onclick="deletarProduto('${p.codigo}')">Excluir</button></td>
+        </tr>`;
+      });
+    }
+
+    function deletarProduto(c){
+      if(confirm('Excluir este produto?')){
+        produtos=produtos.filter(x=>x.codigo!==c);
+        atualizarTudo();
+        mostrarMsg('Produto excluído.');
       }
     }
 
-    // Produtos
-    function adicionarProduto() {
-      const codigo = document.getElementById('codigoProduto').value.trim();
-      const nome = document.getElementById('nomeProduto').value.trim();
-      const valor = parseFloat(document.getElementById('valorProduto').value);
-
-      if(codigo.length !== 2 || !/^\d{2}$/.test(codigo)) {
-        mostrarMensagem('Código deve ter exatamente 2 dígitos numéricos.', false);
-        return;
-      }
-      if(nome === '') {
-        mostrarMensagem('Nome do produto não pode estar vazio.', false);
-        return;
-      }
-      if(isNaN(valor) || valor <= 0) {
-        mostrarMensagem('Valor deve ser um número positivo.', false);
-        return;
-      }
-      if(produtos.find(p => p.codigo === codigo)) {
-        mostrarMensagem('Código já cadastrado.', false);
-        return;
-      }
-
-      produtos.push({codigo, nome, valor});
-      limparCamposProduto();
-      atualizarTabelaProdutos();
-      carregarProdutosNoSelect();
-      mostrarMensagem('Produto adicionado com sucesso!');
-    }
-
-    function limparCamposProduto() {
-      document.getElementById('codigoProduto').value = '';
-      document.getElementById('nomeProduto').value = '';
-      document.getElementById('valorProduto').value = '';
+    function adicionarProduto(){
+      let c=document.getElementById('codigoProduto').value.trim();
+      let n=document.getElementById('nomeProduto').value.trim();
+      let v=parseFloat(document.getElementById('valorProduto').value);
+      if(!/^\d{2}$/.test(c)){ mostrarMsg('Código: 2 dígitos.', false); return;}
+      if(!n){ mostrarMsg('Informe o nome.', false); return;}
+      if(isNaN(v)||v<=0){ mostrarMsg('Valor inválido.', false); return;}
+      if(produtos.some(x=>x.codigo===c)){ mostrarMsg('Código já existe.', false); return;}
+      produtos.push({codigo:c,nome:n,valor:v});
+      document.getElementById('codigoProduto').value='';
+      document.getElementById('nomeProduto').value='';
+      document.getElementById('valorProduto').value='';
       document.getElementById('codigoProduto').focus();
+      atualizarTudo();
+      mostrarMsg('Produto adicionado!');
     }
 
-    function atualizarTabelaProdutos() {
-      const tbody = document.querySelector('#tabelaProdutos tbody');
-      tbody.innerHTML = '';
-      produtos.forEach(prod => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${prod.codigo}</td>
-          <td>${prod.nome}</td>
-          <td>${prod.valor.toFixed(2).replace('.',',')}</td>
-          <td><button title="Excluir produto ${prod.nome}" aria-label="Excluir produto ${prod.nome}" onclick="excluirProduto('${prod.codigo}')">Excluir</button></td>
-        `;
-        tbody.appendChild(tr);
+    /* — Clientes — */
+    function atualizarTabelaClientes(){
+      const tb=document.querySelector('#tabelaClientes tbody');
+      tb.innerHTML='';
+      clientes.forEach((c,i)=>{
+        tb.innerHTML+=`<tr>
+          <td>${c.nome}</td><td>${c.cpfcnpj}</td><td>${c.endereco}</td>
+          <td><button onclick="deletarCliente(${i})">Excluir</button></td>
+        </tr>`;
       });
     }
 
-    function excluirProduto(codigo) {
-      if(confirm('Tem certeza que deseja excluir o produto?')) {
-        produtos = produtos.filter(p => p.codigo !== codigo);
-        atualizarTabelaProdutos();
-        carregarProdutosNoSelect();
-        mostrarMensagem('Produto excluído.');
+    function deletarCliente(i){
+      if(confirm('Excluir este cliente?')){
+        clientes.splice(i,1);
+        atualizarTudo();
+        mostrarMsg('Cliente excluído.');
       }
     }
 
-    function carregarProdutosNoSelect() {
-      const select = document.getElementById('selecionarProdutoNota');
-      select.innerHTML = '<option value="">-- Selecione um produto --</option>';
-      produtos.forEach(prod => {
-        const option = document.createElement('option');
-        option.value = prod.codigo;
-        option.textContent = `${prod.codigo} - ${prod.nome}`;
-        select.appendChild(option);
-      });
-      habilitarBotaoAdicionarItemNota();
+    function validarCPF(c){c=c.replace(/\D/g,''); 
+      if(c.length===11){
+        let s=[0,0], j=10;
+        for(let i=0;i<9;i++){s[0]+=parseInt(c[i])*j; j--;}
+        let d1=11-(s[0]%11); if(d1>=10)d1=0;
+        s[1]=0; j=11;
+        for(let i=0;i<10;i++){s[1]+=parseInt(c[i])*j; j--;}
+        let d2=11-(s[1]%11); if(d2>=10)d2=0;
+        return c[9]==d1&&c[10]==d2;
+      } else if(c.length===14) { /* validar CNPJ */
+        let a=[6,5,4,3,2,9,8,7,6,5,4,3,2];
+        let b=[5,4,3,2,9,8,7,6,5,4,3,2,0];
+        let suma=0, sumb=0;
+        for(let i=0;i<12;i++){suma+=parseInt(c[i])*a[i]; sumb+=parseInt(c[i])*b[i];}
+        let d1=suma%11<2?0:11-(suma%11);
+        sumb+=d1* b[12];
+        let d2=sumb%11<2?0:11-(sumb%11);
+        return c[12]==d1&&c[13]==d2;
+      }
+      return false;
     }
 
-    // Clientes
-    function adicionarCliente() {
-      const nome = document.getElementById('nomeClienteCadastro').value.trim();
-      const cpfcnpj = document.getElementById('cpfCnpjClienteCadastro').value.trim();
-      const endereco = document.getElementById('enderecoClienteCadastro').value.trim();
-
-      if(nome.length < 3) {
-        mostrarMensagem('Nome do cliente deve ter pelo menos 3 caracteres.', false);
-        return;
-      }
-      if(cpfcnpj.length < 11) {
-        mostrarMensagem('CPF/CNPJ inválido.', false);
-        return;
-      }
-      if(endereco.length < 5) {
-        mostrarMensagem('Endereço muito curto.', false);
-        return;
-      }
-
-      clientes.push({nome, cpfcnpj, endereco});
-      limparCamposCliente();
-      atualizarTabelaClientes();
-      carregarClientesNoSelect();
-      mostrarMensagem('Cliente adicionado com sucesso!');
+    function adicionarCliente(){
+      let n=document.getElementById('nomeCli').value.trim();
+      let cpf=document.getElementById('cpfCli').value.trim().replace(/\D/g,'');
+      let e=document.getElementById('endCli').value.trim();
+      if(n.length<3){mostrarMsg('Nome inválido.',false);return;}
+      if(!validarCPF(cpf)){mostrarMsg('CPF/CNPJ inválido.',false);return;}
+      if(e.length<5){mostrarMsg('Endereço curto.',false);return;}
+      clientes.push({nome:n,cpfcnpj:cpf,e});
+      document.getElementById('nomeCli').value='';document.getElementById('cpfCli').value='';document.getElementById('endCli').value='';
+      document.getElementById('nomeCli').focus();
+      atualizarTudo();
+      mostrarMsg('Cliente adicionado!');
     }
 
-    function limparCamposCliente() {
-      document.getElementById('nomeClienteCadastro').value = '';
-      document.getElementById('cpfCnpjClienteCadastro').value = '';
-      document.getElementById('enderecoClienteCadastro').value = '';
-      document.getElementById('nomeClienteCadastro').focus();
+    /* — Export / Import — */
+    function exportarDados(tipo){
+      let data = tipo==='produtos'? produtos : clientes;
+      let blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      let a = document.createElement('a');
+      a.download = `${tipo}.json`;
+      a.href = URL.createObjectURL(blob);
+      a.click();
+      URL.revokeObjectURL(a.href);
     }
 
-    function atualizarTabelaClientes() {
-      const tbody = document.querySelector('#tabelaClientes tbody');
-      tbody.innerHTML = '';
-      clientes.forEach((cli, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${cli.nome}</td>
-          <td>${cli.cpfcnpj}</td>
-          <td>${cli.endereco}</td>
-          <td><button title="Excluir cliente ${cli.nome}" aria-label="Excluir cliente ${cli.nome}" onclick="excluirCliente(${index})">Excluir</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+    function importarDados(tipo){
+      const input = tipo==='produtos'? document.getElementById('importProdutos') : document.getElementById('importClientes');
+      const file = input.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = e=>{
+        try{
+          const arr = JSON.parse(e.target.result);
+          if(Array.isArray(arr)) {
+            if(tipo==='produtos')
+              produtos = arr;
+            else clientes = arr;
+            atualizarTudo();
+            mostrarMsg(`${tipo} importados!`);
+          } else throw '';
+        } catch {
+          mostrarMsg('Arquivo JSON inválido.',false);
+        }
+        input.value='';
+      };
+      reader.readAsText(file);
     }
 
-    function excluirCliente(index) {
-      if(confirm('Tem certeza que deseja excluir o cliente?')) {
-        clientes.splice(index, 1);
-        atualizarTabelaClientes();
-        carregarClientesNoSelect();
-        mostrarMensagem('Cliente excluído.');
-      }
-    }
-
-    function carregarClientesNoSelect() {
-      const select = document.getElementById('selectClienteNota');
-      select.innerHTML = '<option value="">-- Selecione um cliente --</option>';
-      clientes.forEach((cli, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${cli.nome} (${cli.cpfcnpj})`;
-        select.appendChild(option);
-      });
-      habilitarBotaoEmitirNota();
-    }
-
-    // Nota Fiscal
-    function adicionarItemNota() {
-      const codigoProduto = document.getElementById('selecionarProdutoNota').value;
-      const quantidade = parseInt(document.getElementById('quantidadeNota').value, 10);
-
-      if(codigoProduto === '') {
-        mostrarMensagem('Selecione um produto para adicionar.', false);
-        return;
-      }
-      if(isNaN(quantidade) || quantidade < 1) {
-        mostrarMensagem('Quantidade deve ser um número inteiro positivo.', false);
-        return;
-      }
-
-      const produto = produtos.find(p => p.codigo === codigoProduto);
-      if(!produto) {
-        mostrarMensagem('Produto não encontrado.', false);
-        return;
-      }
-
-      // Se produto já estiver na nota, soma quantidade
-      const itemExistente = itensNota.find(item => item.codigo === codigoProduto);
-      if(itemExistente) {
-        itemExistente.quantidade += quantidade;
-      } else {
-        itensNota.push({codigo: produto.codigo, nome: produto.nome, valor: produto.valor, quantidade});
-      }
-
-      atualizarTabelaNota();
-      limparCamposItemNota();
-      habilitarBotaoEmitirNota();
-      mostrarMensagem('Item adicionado à nota.');
-    }
-
-    function atualizarTabelaNota() {
+    /* — Nota Fiscal — */
+    function atualizarNota(){
       const tbody = document.querySelector('#tabelaNota tbody');
       tbody.innerHTML = '';
-
-      itensNota.forEach(item => {
-        const tr = document.createElement('tr');
-        const subtotal = item.valor * item.quantidade;
-        tr.innerHTML = `
-          <td>${item.codigo}</td>
-          <td>${item.nome}</td>
-          <td style="text-align:right;">${item.valor.toFixed(2).replace('.',',')}</td>
+      itensNota.forEach(item=>{
+        let sub=item.valor*item.quantidade;
+        tbody.innerHTML += `<tr>
+          <td>${item.codigo}</td><td>${item.nome}</td>
+          <td style="text-align:right;">${item.valor.toFixed(2)}</td>
           <td style="text-align:center;">${item.quantidade}</td>
-          <td style="text-align:right;">${subtotal.toFixed(2).replace('.',',')}</td>
-        `;
-        tbody.appendChild(tr);
+          <td style="text-align:right;">${sub.toFixed(2)}</td></tr>`;
       });
     }
-
-    function limparCamposItemNota() {
-      document.getElementById('selecionarProdutoNota').value = '';
-      document.getElementById('quantidadeNota').value = 1;
-      document.getElementById('selecionarProdutoNota').focus();
+    function adicionarItemNota(){
+      let c=document.getElementById('selProduto').value;
+      let q=parseInt(document.getElementById('qtdNota').value);
+      if(!c){mostrarMsg('Escolha um produto.',false);return;}
+      if(isNaN(q)||q<1){mostrarMsg('Quantidade inválida.',false);return;}
+      let prod = produtos.find(p=>p.codigo===c);
+      if(!prod){mostrarMsg('Produto não existe.',false);return;}
+      let it = itensNota.find(i=>i.codigo===c);
+      if(it) it.quantidade+=q;
+      else itensNota.push({codigo:c,nome:prod.nome,valor:prod.valor,quantidade:q});
+      atualizarNota();
+      document.getElementById('btnEmitirNota').disabled = !(itensNota.length && document.getElementById('selCliente').value);
+      mostrarMsg('Item adicionado na nota!');
     }
 
-    function habilitarBotaoEmitirNota() {
-      const clienteSelecionado = document.getElementById('selectClienteNota').value;
-      const btn = document.getElementById('btnEmitirNota');
-      btn.disabled = !(clienteSelecionado !== '' && itensNota.length > 0);
-    }
-    function habilitarBotaoAdicionarItemNota() {
-      const produtosDisponiveis = produtos.length > 0;
-      document.getElementById('btnAddItemNota').disabled = !produtosDisponiveis;
-    }
-
-    // Quando cliente mudar, habilita ou desabilita botão emitir nota
-    document.getElementById('selectClienteNota').addEventListener('change', habilitarBotaoEmitirNota);
-
-    function emitirNota() {
-      if(itensNota.length === 0) {
-        mostrarMensagem('Adicione pelo menos um item para emitir nota.', false);
-        return;
-      }
-
-      const clienteIndex = parseInt(document.getElementById('selectClienteNota').value, 10);
-      if(isNaN(clienteIndex) || !clientes[clienteIndex]) {
-        mostrarMensagem('Selecione um cliente válido.', false);
-        return;
-      }
-
-      const cliente = clientes[clienteIndex];
-      let total = 0;
-      let textoNota = '';
-      textoNota += 'PALMAS AUTO PEÇAS - NOTA FISCAL\n\n';
-      textoNota += `Cliente: ${cliente.nome}\nCPF/CNPJ: ${cliente.cpfcnpj}\nEndereço: ${cliente.endereco}\n\n`;
-      textoNota += 'Itens:\n';
-      textoNota += 'Código | Produto                | Valor Unit. | Qtde | Subtotal\n';
-      textoNota += '--------------------------------------------------------------\n';
-
-      itensNota.forEach(item => {
-        const subtotal = item.valor * item.quantidade;
-        total += subtotal;
-        textoNota += `${item.codigo.padEnd(6)} | ${item.nome.padEnd(22)} | R$ ${item.valor.toFixed(2).padStart(8).replace('.',',')} | ${item.quantidade.toString().padStart(4)} | R$ ${subtotal.toFixed(2).padStart(8).replace('.',',')}\n`;
+    function emitirNota(){
+      if(!itensNota.length){mostrarMsg('Não há itens na nota.',false);return;}
+      let cli = clientes[document.getElementById('selCliente').value];
+      if(!cli){mostrarMsg('Selecione um cliente.',false);return;}
+      const dt = new Date();
+      let nf = '';
+      nf+=`PALMAS AUTO PEÇAS - NOTA FISCAL\n`;
+      nf+=`Data: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}\n`;
+      nf+=`Cliente: ${cli.nome}\nCPF/CNPJ: ${cli.cpfcnpj}\nEnd: ${cli.endereco}\n\n`;
+      nf+=`Itens:\nCódigo | Produto             | Valor  | Qtde | Subtotal\n`;
+      nf+=`--------------------------------------------------------\n`;
+      let total=0;
+      itensNota.forEach(item=>{
+        let sub=item.valor*item.quantidade;
+        total+=sub;
+        nf+=`${item.codigo.padEnd(6)} | ${item.nome.padEnd(18)} | ${item.valor.toFixed(2).padStart(6)} | ${item.quantidade.toString().padStart(4)} | ${sub.toFixed(2).padStart(7)}\n`;
       });
-      textoNota += '--------------------------------------------------------------\n';
-      textoNota += `Total: R$ ${total.toFixed(2).replace('.',',')}\n`;
-      textoNota += '\nObrigado pela preferência!';
-
-      const preNota = document.getElementById('notaEmitida');
-      preNota.textContent = textoNota;
-      preNota.classList.remove('hidden');
-
-      document.getElementById('btnDownloadPdf').classList.remove('hidden');
-
-      mostrarMensagem('Nota fiscal emitida com sucesso!');
+      nf+=`--------------------------------------------------------\nTOTAL: ${total.toFixed(2)}\n\nObrigado!`;
+      document.getElementById('notaEmitida').textContent=nf;
+      document.getElementById('notaEmitida').classList.remove('hidden');
+      document.getElementById('btnImprimirNota').classList.remove('hidden');
+      document.getElementById('btnDownloadPDF').classList.remove('hidden');
+      mostrarMsg('Nota emitida com sucesso!');
     }
 
-    function limparNota() {
-      itensNota = [];
-      atualizarTabelaNota();
+    function limparNota(){
+      itensNota=[];
+      atualizarNota();
       document.getElementById('notaEmitida').classList.add('hidden');
-      document.getElementById('btnDownloadPdf').classList.add('hidden');
-      habilitarBotaoEmitirNota();
+      document.getElementById('btnImprimirNota').classList.add('hidden');
+      document.getElementById('btnDownloadPDF').classList.add('hidden');
+      document.getElementById('btnEmitirNota').disabled = true;
     }
 
-    // Gerar PDF da nota
-    async function baixarPDF() {
+    async function baixarPDF(){
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const texto = document.getElementById('notaEmitida').textContent;
-
-      const lines = doc.splitTextToSize(texto, 180);
-      doc.setFont("Courier", "normal");
+      let texto = document.getElementById('notaEmitida').textContent;
+      doc.setFont('Courier','normal');
       doc.setFontSize(12);
-      doc.text(lines, 10, 10);
-
-      doc.save("Nota_Fiscal_Palmas_AutoPecas.pdf");
+      let linhas = doc.splitTextToSize(texto,180);
+      doc.text(linhas,10,10);
+      doc.save('nota-fiscal.pdf');
     }
-  </script>
 
+    function atualizarTudo(){
+      atualizarTabelaProdutos();
+      atualizarTabelaClientes();
+      atualizarProdutoClienteSelects();
+    }
+    function atualizarProdutoClienteSelects(){
+      let sp=document.getElementById('selProduto');
+      let sc=document.getElementById('selCliente');
+      sp.innerHTML='<option value="">-- selecione --</option>';
+      produtos.forEach(p=> sp.innerHTML+=`<option value="${p.codigo}">${p.codigo} - ${p.nome}</option>`);
+      sc.innerHTML='<option value="">-- selecione --</option>';
+      clientes.forEach((c,i)=> sc.innerHTML+=`<option value="${i}">${c.nome}</option>`);
+    }
+
+    document.getElementById('selCliente').addEventListener('change',()=>{
+      document.getElementById('btnEmitirNota').disabled = !(itensNota.length && document.getElementById('selCliente').value);
+    });
+  </script>
 </body>
 </html>
