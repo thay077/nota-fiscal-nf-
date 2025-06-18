@@ -1,540 +1,620 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PALMAS AUTO PEÇAS - NOTA FISCAL</title>
-<style>
-  body {
-    margin: 0; padding: 0;
-    font-family: Arial, sans-serif;
-    background: #e6f0fa;
-    color: #03396c;
-  }
-  h1, h2 {
-    color: #03396c;
-  }
-  /* LOGIN */
-  #login {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  #login form {
-    background: white;
-    padding: 40px 50px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    width: 320px;
-    text-align: center;
-  }
-  #login label {
-    display: block;
-    text-align: left;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 14px;
-  }
-  #login input[type="text"], #login input[type="password"] {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 20px;
-    border: 1.8px solid #b0c4de;
-    border-radius: 6px;
-    font-size: 15px;
-    color: #03396c;
-    transition: border-color 0.3s;
-  }
-  #login input[type="text"]:focus, #login input[type="password"]:focus {
-    border-color: #4a90e2;
-    outline: none;
-  }
-  #login button {
-    width: 100%;
-    padding: 12px 0;
-    background-color: #4a90e2;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.3s;
-  }
-  #login button:hover {
-    background-color: #357abd;
-  }
-
-  /* APP PRINCIPAL */
-  #app {
-    display: none;
-    max-width: 900px;
-    margin: 20px auto 40px;
-    background: white;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  #app h1 {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  section {
-    margin-bottom: 30px;
-  }
-  label {
-    font-weight: 600;
-    margin-top: 10px;
-    display: block;
-    color: #03396c;
-  }
-  input[type="text"], input[type="number"] {
-    width: 100%;
-    padding: 8px 10px;
-    margin-top: 6px;
-    border: 1.8px solid #b0c4de;
-    border-radius: 6px;
-    font-size: 15px;
-    color: #03396c;
-    box-sizing: border-box;
-  }
-  input[type="number"]::-webkit-inner-spin-button, 
-  input[type="number"]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
-  }
-  button {
-    background-color: #4a90e2;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 15px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.3s;
-    margin-top: 15px;
-  }
-  button:hover {
-    background-color: #357abd;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-  }
-  th, td {
-    border: 1.5px solid #b0c4de;
-    padding: 8px 12px;
-    text-align: left;
-    color: #03396c;
-  }
-  th {
-    background: #d6e4ff;
-  }
-  .btn-excluir {
-    background-color: #e53e3e;
-    padding: 5px 8px;
-    border-radius: 5px;
-    font-size: 13px;
-  }
-  .btn-excluir:hover {
-    background-color: #b82c2c;
-  }
-  .flex-row {
-    display: flex;
-    gap: 15px;
-  }
-  .flex-col {
-    flex: 1;
-  }
-  /* Responsividade simples */
-  @media(max-width: 600px){
-    #app {
-      margin: 10px;
-      padding: 15px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PALMAS AUTO PEÇAS - NOTA FISCAL</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Reset básico */
+    * {
+      box-sizing: border-box;
     }
-    .flex-row {
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5faff;
+      margin: 0;
+      color: #003366;
+      min-height: 100vh;
+      display: flex;
       flex-direction: column;
     }
-  }
-</style>
+    h1 {
+      background-color: #007acc;
+      color: white;
+      margin: 0;
+      padding: 20px 0;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .container {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 25px auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 122, 204, 0.2);
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    input[type=text], input[type=number], select, input[type=password] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1.8px solid #7db9e8;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type=text]:focus, input[type=number]:focus, select:focus, input[type=password]:focus {
+      outline: none;
+      border-color: #005f99;
+      box-shadow: 0 0 8px #4ca3ddaa;
+    }
+    button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 3px 7px rgba(0,122,204,0.4);
+      user-select: none;
+    }
+    button:hover:not(:disabled) {
+      background-color: #005f99;
+    }
+    button:disabled {
+      background-color: #a3c7ff;
+      cursor: default;
+      box-shadow: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    th, td {
+      border: 1.6px solid #a8cdfd;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #d0e5ff;
+      font-weight: 700;
+      color: #003366;
+    }
+    td button {
+      background-color: #cc3300;
+      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 4px;
+      box-shadow: none;
+      user-select: none;
+    }
+    td button:hover {
+      background-color: #a02700;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .btn-group button {
+      min-width: 160px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      box-shadow: 0 3px 7px rgba(0, 122, 204, 0.5);
+    }
+    #notaEmitida {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1.5px solid #7db9e8;
+      background: #e8f2ff;
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      color: #004080;
+      user-select: text;
+      min-height: 240px;
+    }
+    #btnDownloadPdf {
+      margin-top: 15px;
+    }
+    /* Feedback mensagem */
+    #msgFeedback {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #007accdd;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0,122,204,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      user-select: none;
+      z-index: 9999;
+    }
+    #msgFeedback.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Rodapé */
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #005f99;
+      padding: 12px 0;
+      background: #d0e5ff;
+      user-select: none;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+  </style>
 </head>
 <body>
 
-<div id="login">
-  <form onsubmit="return fazerLogin(event)">
-    <h2>PALMAS AUTO PEÇAS - NOTA FISCAL</h2>
-    <label for="inputUsuario">Usuário</label>
-    <input type="text" id="inputUsuario" placeholder="Digite seu usuário" />
-    
-    <label for="inputSenha">Senha</label>
-    <input type="password" id="inputSenha" placeholder="Digite sua senha" />
-    
-    <button type="submit">Entrar</button>
-  </form>
-</div>
+  <h1>PALMAS AUTO PEÇAS - NOTA FISCAL</h1>
 
-<div id="app">
-  <h1>PALMAS AUTO PEÇAS - SISTEMA DE NOTA FISCAL</h1>
+  <div class="container" id="loginContainer">
+    <h2>Login</h2>
+    <label for="usuario">Usuário:</label>
+    <input type="text" id="usuario" placeholder="Digite seu usuário" autocomplete="username" />
+    <label for="senha">Senha:</label>
+    <input type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password" />
+    <button onclick="login()">Entrar</button>
+  </div>
 
-  <!-- Cadastro de Produtos -->
-  <section>
-    <h2>Cadastrar Produto</h2>
-    <div class="flex-row">
-      <div class="flex-col">
-        <label for="codigoProduto">Código (2 dígitos)</label>
-        <input type="text" id="codigoProduto" maxlength="2" placeholder="Ex: 01" />
-      </div>
-      <div class="flex-col">
-        <label for="nomeProduto">Nome do Produto</label>
-        <input type="text" id="nomeProduto" placeholder="Ex: Pastilha de freio" />
-      </div>
+  <div class="container hidden" id="mainContainer">
+
+    <div class="btn-group">
+      <button onclick="mostrarTela('produtosContainer')">Cadastrar Produtos</button>
+      <button onclick="mostrarTela('clientesContainer')">Cadastrar Clientes</button>
+      <button onclick="mostrarTela('notaContainer')">Emitir Nota Fiscal</button>
     </div>
-    <div class="flex-row">
-      <div class="flex-col">
-        <label for="valorProduto">Valor (R$)</label>
-        <input type="text" id="valorProduto" placeholder="Ex: 150.00" />
-      </div>
-      <div class="flex-col">
-        <label for="quantidadeProduto">Quantidade</label>
-        <input type="number" id="quantidadeProduto" min="1" placeholder="Ex: 5" />
-      </div>
-    </div>
-    <button onclick="adicionarProduto()">Adicionar Produto</button>
 
-    <table id="tabelaProdutos">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Produto</th>
-          <th>Valor (R$)</th>
-          <th>Quantidade</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Produtos aparecerão aqui -->
-      </tbody>
-    </table>
-  </section>
+    <!-- Cadastro Produtos -->
+    <section id="produtosContainer" class="hidden" aria-label="Cadastro de Produtos">
+      <h2>Cadastro de Produtos</h2>
+      <label for="codigoProduto">Código (2 dígitos):</label>
+      <input type="text" id="codigoProduto" maxlength="2" placeholder="Ex: 01" aria-describedby="codigoHelp" />
+      <label for="nomeProduto">Nome do Produto:</label>
+      <input type="text" id="nomeProduto" placeholder="Ex: Filtro de Óleo" />
+      <label for="valorProduto">Valor (R$):</label>
+      <input type="number" step="0.01" min="0" id="valorProduto" placeholder="Ex: 99.90" />
+      <button id="btnAddProduto" onclick="adicionarProduto()">Adicionar Produto</button>
 
-  <!-- Nota Fiscal -->
-  <section>
-    <h2>Emitir Nota Fiscal</h2>
-
-    <div class="flex-row">
-      <div class="flex-col">
-        <label for="nomeCliente">Nome do Cliente</label>
-        <input type="text" id="nomeCliente" placeholder="Ex: João Silva" />
-      </div>
-      <div class="flex-col">
-        <label for="cpfCnpjCliente">CPF ou CNPJ</label>
-        <input type="text" id="cpfCnpjCliente" placeholder="Ex: 000.000.000-00" />
-      </div>
-    </div>
-    <label for="enderecoCliente">Endereço</label>
-    <input type="text" id="enderecoCliente" placeholder="Ex: Rua das Flores, 123" />
-
-    <label for="selecionarProdutoNota">Selecionar Produto</label>
-    <select id="selecionarProdutoNota">
-      <option value="" disabled selected>-- Escolha o produto --</option>
-    </select>
-
-    <label for="quantidadeNota">Quantidade</label>
-    <input type="number" id="quantidadeNota" min="1" value="1" />
-
-    <button onclick="adicionarProdutoNota()">Adicionar Produto à Nota</button>
-
-    <table id="tabelaNota">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Produto</th>
-          <th>Valor Unitário (R$)</th>
-          <th>Quantidade</th>
-          <th>Subtotal (R$)</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Itens da nota -->
-      </tbody>
-      <tfoot>
-        <tr>
-          <th colspan="4" style="text-align:right">TOTAL:</th>
-          <th id="totalNota">0,00</th>
-          <th></th>
-        </tr>
-      </tfoot>
-    </table>
-
-    <button onclick="emitirNota()">Emitir Nota Fiscal</button>
-
-    <div id="notaEmitida" style="margin-top: 20px; background: #d6e4ff; padding: 15px; border-radius: 8px; display:none; color:#03396c;">
-      <!-- Nota fiscal será exibida aqui -->
-    </div>
-  </section>
-
-</div>
-
-<script>
-  // Variáveis globais
-  let produtos = [];
-  let itensNota = [];
-
-  // Login - aceita qualquer usuário/senha
-  function fazerLogin(event){
-    event.preventDefault();
-    const usuario = document.getElementById("inputUsuario").value.trim();
-    const senha = document.getElementById("inputSenha").value.trim();
-
-    if(usuario === "" || senha === ""){
-      alert("Por favor, preencha usuário e senha.");
-      return false;
-    }
-    // esconder login, mostrar app
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    return false;
-  }
-
-  // Adicionar produto na lista
-  function adicionarProduto(){
-    const codigo = document.getElementById("codigoProduto").value.trim();
-    const nome = document.getElementById("nomeProduto").value.trim();
-    let valor = document.getElementById("valorProduto").value.trim();
-    let quantidade = document.getElementById("quantidadeProduto").value.trim();
-
-    if(codigo.length !== 2 || isNaN(Number(codigo))){
-      alert("Código deve ter 2 dígitos numéricos.");
-      return;
-    }
-    if(nome === ""){
-      alert("Informe o nome do produto.");
-      return;
-    }
-    // substituir vírgula por ponto para valor
-    valor = valor.replace(",",".");
-    if(valor === "" || isNaN(Number(valor)) || Number(valor) <= 0){
-      alert("Informe um valor válido maior que zero.");
-      return;
-    }
-    quantidade = Number(quantidade);
-    if(quantidade <= 0 || isNaN(quantidade)){
-      alert("Informe uma quantidade válida maior que zero.");
-      return;
-    }
-
-    // Verifica se código já existe, atualizar ou rejeitar
-    const idx = produtos.findIndex(p => p.codigo === codigo);
-    if(idx >= 0){
-      alert("Código já cadastrado!");
-      return;
-    }
-
-    produtos.push({codigo, nome, valor: Number(valor), quantidade});
-    atualizarTabelaProdutos();
-    atualizarSelectProdutos();
-
-    // limpar campos
-    document.getElementById("codigoProduto").value = "";
-    document.getElementById("nomeProduto").value = "";
-    document.getElementById("valorProduto").value = "";
-    document.getElementById("quantidadeProduto").value = "";
-  }
-
-  // Atualiza tabela de produtos
-  function atualizarTabelaProdutos(){
-    const tbody = document.querySelector("#tabelaProdutos tbody");
-    tbody.innerHTML = "";
-
-    produtos.forEach((p, i) => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${p.codigo}</td>
-        <td>${p.nome}</td>
-        <td>${p.valor.toFixed(2).replace(".",",")}</td>
-        <td>${p.quantidade}</td>
-        <td><button class="btn-excluir" onclick="excluirProduto('${p.codigo}')">Excluir</button></td>
-      `;
-
-      tbody.appendChild(tr);
-    });
-  }
-
-  // Atualiza select de produtos para a nota fiscal
-  function atualizarSelectProdutos(){
-    const select = document.getElementById("selecionarProdutoNota");
-    select.innerHTML = `<option value="" disabled selected>-- Escolha o produto --</option>`;
-    produtos.forEach(p => {
-      select.innerHTML += `<option value="${p.codigo}">${p.codigo} - ${p.nome}</option>`;
-    });
-  }
-
-  // Excluir produto da lista
-  function excluirProduto(codigo){
-    if(confirm("Confirma exclusão do produto?")){
-      produtos = produtos.filter(p => p.codigo !== codigo);
-      atualizarTabelaProdutos();
-      atualizarSelectProdutos();
-      // Também remover da nota se tiver
-      itensNota = itensNota.filter(item => item.codigo !== codigo);
-      atualizarTabelaNota();
-    }
-  }
-
-  // Adicionar produto na nota fiscal
-  function adicionarProdutoNota(){
-    const codigo = document.getElementById("selecionarProdutoNota").value;
-    let quantidade = Number(document.getElementById("quantidadeNota").value);
-
-    if(!codigo){
-      alert("Selecione um produto.");
-      return;
-    }
-    if(quantidade <= 0 || isNaN(quantidade)){
-      alert("Informe uma quantidade válida maior que zero.");
-      return;
-    }
-
-    const produto = produtos.find(p => p.codigo === codigo);
-    if(!produto){
-      alert("Produto não encontrado.");
-      return;
-    }
-    // Verificar se já está na nota, somar quantidade
-    const idx = itensNota.findIndex(item => item.codigo === codigo);
-    if(idx >= 0){
-      itensNota[idx].quantidade += quantidade;
-    } else {
-      itensNota.push({
-        codigo: produto.codigo,
-        nome: produto.nome,
-        valor: produto.valor,
-        quantidade: quantidade
-      });
-    }
-    atualizarTabelaNota();
-  }
-
-  // Atualizar tabela da nota fiscal
-  function atualizarTabelaNota(){
-    const tbody = document.querySelector("#tabelaNota tbody");
-    tbody.innerHTML = "";
-
-    let total = 0;
-    itensNota.forEach((item, i) => {
-      const subtotal = item.valor * item.quantidade;
-      total += subtotal;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${item.codigo}</td>
-        <td>${item.nome}</td>
-        <td>${item.valor.toFixed(2).replace(".",",")}</td>
-        <td>${item.quantidade}</td>
-        <td>${subtotal.toFixed(2).replace(".",",")}</td>
-        <td><button class="btn-excluir" onclick="removerItemNota(${i})">Excluir</button></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    document.getElementById("totalNota").textContent = total.toFixed(2).replace(".",",");
-  }
-
-  // Remover item da nota fiscal
-  function removerItemNota(index){
-    itensNota.splice(index,1);
-    atualizarTabelaNota();
-  }
-
-  // Emitir nota fiscal
-  function emitirNota(){
-    if(itensNota.length === 0){
-      alert("Adicione pelo menos um produto na nota.");
-      return;
-    }
-
-    const nomeCliente = document.getElementById("nomeCliente").value.trim();
-    const cpfCnpj = document.getElementById("cpfCnpjCliente").value.trim();
-    const endereco = document.getElementById("enderecoCliente").value.trim();
-
-    if(!nomeCliente || !cpfCnpj || !endereco){
-      alert("Preencha os dados do cliente.");
-      return;
-    }
-
-    const agora = new Date();
-    const dataStr = agora.toLocaleDateString("pt-BR");
-    const horaStr = agora.toLocaleTimeString("pt-BR");
-
-    let total = 0;
-    itensNota.forEach(item => total += item.valor * item.quantidade);
-
-    // Gerar HTML da nota
-    let htmlNota = `
-      <h3>Nota Fiscal - PALMAS AUTO PEÇAS</h3>
-      <p><strong>Data:</strong> ${dataStr} <strong>Hora:</strong> ${horaStr}</p>
-      <p><strong>Cliente:</strong> ${nomeCliente}</p>
-      <p><strong>CPF/CNPJ:</strong> ${cpfCnpj}</p>
-      <p><strong>Endereço:</strong> ${endereco}</p>
-      <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+      <table id="tabelaProdutos" aria-live="polite" aria-label="Lista de Produtos cadastrados">
         <thead>
-          <tr style="background:#d6e4ff; border: 1.5px solid #b0c4de;">
-            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Código</th>
-            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Produto</th>
-            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Valor Unitário (R$)</th>
-            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Quantidade</th>
-            <th style="border: 1.5px solid #b0c4de; padding: 6px;">Subtotal (R$)</th>
+          <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Valor (R$)</th>
+            <th>Ação</th>
           </tr>
         </thead>
         <tbody>
-    `;
-    itensNota.forEach(item => {
-      const subtotal = item.valor * item.quantidade;
-      htmlNota += `
-        <tr>
-          <td style="border: 1.5px solid #b0c4de; padding: 6px;">${item.codigo}</td>
-          <td style="border: 1.5px solid #b0c4de; padding: 6px;">${item.nome}</td>
-          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${item.valor.toFixed(2).replace(".",",")}</td>
-          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:center;">${item.quantidade}</td>
-          <td style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${subtotal.toFixed(2).replace(".",",")}</td>
-        </tr>
-      `;
-    });
-
-    htmlNota += `
+          <!-- Produtos adicionados aparecerão aqui -->
         </tbody>
-        <tfoot>
-          <tr>
-            <th colspan="4" style="text-align:right; border: 1.5px solid #b0c4de; padding: 6px;">TOTAL:</th>
-            <th style="border: 1.5px solid #b0c4de; padding: 6px; text-align:right;">${total.toFixed(2).replace(".",",")}</th>
-          </tr>
-        </tfoot>
       </table>
-      <p style="margin-top:15px;">Obrigado pela preferência!</p>
-    `;
+    </section>
 
-    const divNota = document.getElementById("notaEmitida");
-    divNota.innerHTML = htmlNota;
-    divNota.style.display = "block";
+    <!-- Cadastro Clientes -->
+    <section id="clientesContainer" class="hidden" aria-label="Cadastro de Clientes">
+      <h2>Cadastro de Clientes</h2>
+      <label for="nomeClienteCadastro">Nome do Cliente:</label>
+      <input type="text" id="nomeClienteCadastro" placeholder="Nome completo" />
+      <label for="cpfCnpjClienteCadastro">CPF/CNPJ:</label>
+      <input type="text" id="cpfCnpjClienteCadastro" placeholder="CPF ou CNPJ" />
+      <label for="enderecoClienteCadastro">Endereço:</label>
+      <input type="text" id="enderecoClienteCadastro" placeholder="Endereço do cliente" />
+      <button id="btnAddCliente" onclick="adicionarCliente()">Adicionar Cliente</button>
 
-    // Limpar dados da nota
-    itensNota = [];
-    atualizarTabelaNota();
+      <table id="tabelaClientes" aria-live="polite" aria-label="Lista de Clientes cadastrados">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF/CNPJ</th>
+            <th>Endereço</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Clientes adicionados aparecerão aqui -->
+        </tbody>
+      </table>
+    </section>
 
-    // Limpar cliente
-    document.getElementById("nomeCliente").value = "";
-    document.getElementById("cpfCnpjCliente").value = "";
-    document.getElementById("enderecoCliente").value = "";
-    document.getElementById("selecionarProdutoNota").value = "";
-    document.getElementById("quantidadeNota").value = 1;
-  }
-</script>
+    <!-- Emitir Nota Fiscal -->
+    <section id="notaContainer" class="hidden" aria-label="Emitir Nota Fiscal">
+      <h2>Emitir Nota Fiscal</h2>
+
+      <label for="selectClienteNota">Cliente:</label>
+      <select id="selectClienteNota" aria-required="true">
+        <option value="">-- Selecione um cliente --</option>
+      </select>
+
+      <label for="selecionarProdutoNota">Produto:</label>
+      <select id="selecionarProdutoNota" aria-required="true">
+        <option value="">-- Selecione um produto --</option>
+      </select>
+
+      <label for="quantidadeNota">Quantidade:</label>
+      <input type="number" id="quantidadeNota" min="1" value="1" />
+
+      <button id="btnAddItemNota" onclick="adicionarItemNota()">Adicionar à Nota</button>
+
+      <table id="tabelaNota" aria-live="polite" aria-label="Itens da Nota Fiscal">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Produto</th>
+            <th style="text-align:right;">Valor Unitário (R$)</th>
+            <th style="text-align:center;">Quantidade</th>
+            <th style="text-align:right;">Subtotal (R$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Itens da nota aparecem aqui -->
+        </tbody>
+      </table>
+
+      <button id="btnEmitirNota" onclick="emitirNota()" disabled>Emitir Nota Fiscal</button>
+
+      <pre id="notaEmitida" class="hidden" aria-live="polite" aria-label="Nota Fiscal emitida"></pre>
+      <button id="btnDownloadPdf" class="hidden" onclick="baixarPDF()">Baixar Nota Fiscal em PDF</button>
+    </section>
+
+  </div>
+
+  <div id="msgFeedback"></div>
+
+  <footer>
+    &copy; 2025 Palmas Auto Peças. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    let produtos = [];
+    let clientes = [];
+    let itensNota = [];
+
+    const msgFeedback = document.getElementById('msgFeedback');
+
+    // Exibe mensagens temporárias de feedback
+    function mostrarMensagem(texto, sucesso = true) {
+      msgFeedback.textContent = texto;
+      msgFeedback.style.backgroundColor = sucesso ? '#007accdd' : '#cc3300dd';
+      msgFeedback.classList.add('show');
+      setTimeout(() => msgFeedback.classList.remove('show'), 3500);
+    }
+
+    function login() {
+      const usuario = document.getElementById('usuario').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if(usuario === '' || senha === '') {
+        mostrarMensagem('Preencha usuário e senha.', false);
+        return;
+      }
+      // Aqui poderia validar contra um backend; aceita qualquer login
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('mainContainer').classList.remove('hidden');
+      mostrarTela('produtosContainer');
+      carregarProdutosNoSelect();
+      carregarClientesNoSelect();
+      mostrarMensagem('Login efetuado com sucesso!');
+    }
+
+    function mostrarTela(id) {
+      const telas = ['produtosContainer', 'clientesContainer', 'notaContainer'];
+      telas.forEach(tela => {
+        document.getElementById(tela).classList.toggle('hidden', tela !== id);
+      });
+      // Reset mensagens da nota
+      if(id !== 'notaContainer') {
+        limparNota();
+      }
+    }
+
+    // Produtos
+    function adicionarProduto() {
+      const codigo = document.getElementById('codigoProduto').value.trim();
+      const nome = document.getElementById('nomeProduto').value.trim();
+      const valor = parseFloat(document.getElementById('valorProduto').value);
+
+      if(codigo.length !== 2 || !/^\d{2}$/.test(codigo)) {
+        mostrarMensagem('Código deve ter exatamente 2 dígitos numéricos.', false);
+        return;
+      }
+      if(nome === '') {
+        mostrarMensagem('Nome do produto não pode estar vazio.', false);
+        return;
+      }
+      if(isNaN(valor) || valor <= 0) {
+        mostrarMensagem('Valor deve ser um número positivo.', false);
+        return;
+      }
+      if(produtos.find(p => p.codigo === codigo)) {
+        mostrarMensagem('Código já cadastrado.', false);
+        return;
+      }
+
+      produtos.push({codigo, nome, valor});
+      limparCamposProduto();
+      atualizarTabelaProdutos();
+      carregarProdutosNoSelect();
+      mostrarMensagem('Produto adicionado com sucesso!');
+    }
+
+    function limparCamposProduto() {
+      document.getElementById('codigoProduto').value = '';
+      document.getElementById('nomeProduto').value = '';
+      document.getElementById('valorProduto').value = '';
+      document.getElementById('codigoProduto').focus();
+    }
+
+    function atualizarTabelaProdutos() {
+      const tbody = document.querySelector('#tabelaProdutos tbody');
+      tbody.innerHTML = '';
+      produtos.forEach(prod => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${prod.codigo}</td>
+          <td>${prod.nome}</td>
+          <td>${prod.valor.toFixed(2).replace('.',',')}</td>
+          <td><button title="Excluir produto ${prod.nome}" aria-label="Excluir produto ${prod.nome}" onclick="excluirProduto('${prod.codigo}')">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function excluirProduto(codigo) {
+      if(confirm('Tem certeza que deseja excluir o produto?')) {
+        produtos = produtos.filter(p => p.codigo !== codigo);
+        atualizarTabelaProdutos();
+        carregarProdutosNoSelect();
+        mostrarMensagem('Produto excluído.');
+      }
+    }
+
+    function carregarProdutosNoSelect() {
+      const select = document.getElementById('selecionarProdutoNota');
+      select.innerHTML = '<option value="">-- Selecione um produto --</option>';
+      produtos.forEach(prod => {
+        const option = document.createElement('option');
+        option.value = prod.codigo;
+        option.textContent = `${prod.codigo} - ${prod.nome}`;
+        select.appendChild(option);
+      });
+      habilitarBotaoAdicionarItemNota();
+    }
+
+    // Clientes
+    function adicionarCliente() {
+      const nome = document.getElementById('nomeClienteCadastro').value.trim();
+      const cpfcnpj = document.getElementById('cpfCnpjClienteCadastro').value.trim();
+      const endereco = document.getElementById('enderecoClienteCadastro').value.trim();
+
+      if(nome.length < 3) {
+        mostrarMensagem('Nome do cliente deve ter pelo menos 3 caracteres.', false);
+        return;
+      }
+      if(cpfcnpj.length < 11) {
+        mostrarMensagem('CPF/CNPJ inválido.', false);
+        return;
+      }
+      if(endereco.length < 5) {
+        mostrarMensagem('Endereço muito curto.', false);
+        return;
+      }
+
+      clientes.push({nome, cpfcnpj, endereco});
+      limparCamposCliente();
+      atualizarTabelaClientes();
+      carregarClientesNoSelect();
+      mostrarMensagem('Cliente adicionado com sucesso!');
+    }
+
+    function limparCamposCliente() {
+      document.getElementById('nomeClienteCadastro').value = '';
+      document.getElementById('cpfCnpjClienteCadastro').value = '';
+      document.getElementById('enderecoClienteCadastro').value = '';
+      document.getElementById('nomeClienteCadastro').focus();
+    }
+
+    function atualizarTabelaClientes() {
+      const tbody = document.querySelector('#tabelaClientes tbody');
+      tbody.innerHTML = '';
+      clientes.forEach((cli, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${cli.nome}</td>
+          <td>${cli.cpfcnpj}</td>
+          <td>${cli.endereco}</td>
+          <td><button title="Excluir cliente ${cli.nome}" aria-label="Excluir cliente ${cli.nome}" onclick="excluirCliente(${index})">Excluir</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function excluirCliente(index) {
+      if(confirm('Tem certeza que deseja excluir o cliente?')) {
+        clientes.splice(index, 1);
+        atualizarTabelaClientes();
+        carregarClientesNoSelect();
+        mostrarMensagem('Cliente excluído.');
+      }
+    }
+
+    function carregarClientesNoSelect() {
+      const select = document.getElementById('selectClienteNota');
+      select.innerHTML = '<option value="">-- Selecione um cliente --</option>';
+      clientes.forEach((cli, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${cli.nome} (${cli.cpfcnpj})`;
+        select.appendChild(option);
+      });
+      habilitarBotaoEmitirNota();
+    }
+
+    // Nota Fiscal
+    function adicionarItemNota() {
+      const codigoProduto = document.getElementById('selecionarProdutoNota').value;
+      const quantidade = parseInt(document.getElementById('quantidadeNota').value, 10);
+
+      if(codigoProduto === '') {
+        mostrarMensagem('Selecione um produto para adicionar.', false);
+        return;
+      }
+      if(isNaN(quantidade) || quantidade < 1) {
+        mostrarMensagem('Quantidade deve ser um número inteiro positivo.', false);
+        return;
+      }
+
+      const produto = produtos.find(p => p.codigo === codigoProduto);
+      if(!produto) {
+        mostrarMensagem('Produto não encontrado.', false);
+        return;
+      }
+
+      // Se produto já estiver na nota, soma quantidade
+      const itemExistente = itensNota.find(item => item.codigo === codigoProduto);
+      if(itemExistente) {
+        itemExistente.quantidade += quantidade;
+      } else {
+        itensNota.push({codigo: produto.codigo, nome: produto.nome, valor: produto.valor, quantidade});
+      }
+
+      atualizarTabelaNota();
+      limparCamposItemNota();
+      habilitarBotaoEmitirNota();
+      mostrarMensagem('Item adicionado à nota.');
+    }
+
+    function atualizarTabelaNota() {
+      const tbody = document.querySelector('#tabelaNota tbody');
+      tbody.innerHTML = '';
+
+      itensNota.forEach(item => {
+        const tr = document.createElement('tr');
+        const subtotal = item.valor * item.quantidade;
+        tr.innerHTML = `
+          <td>${item.codigo}</td>
+          <td>${item.nome}</td>
+          <td style="text-align:right;">${item.valor.toFixed(2).replace('.',',')}</td>
+          <td style="text-align:center;">${item.quantidade}</td>
+          <td style="text-align:right;">${subtotal.toFixed(2).replace('.',',')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function limparCamposItemNota() {
+      document.getElementById('selecionarProdutoNota').value = '';
+      document.getElementById('quantidadeNota').value = 1;
+      document.getElementById('selecionarProdutoNota').focus();
+    }
+
+    function habilitarBotaoEmitirNota() {
+      const clienteSelecionado = document.getElementById('selectClienteNota').value;
+      const btn = document.getElementById('btnEmitirNota');
+      btn.disabled = !(clienteSelecionado !== '' && itensNota.length > 0);
+    }
+    function habilitarBotaoAdicionarItemNota() {
+      const produtosDisponiveis = produtos.length > 0;
+      document.getElementById('btnAddItemNota').disabled = !produtosDisponiveis;
+    }
+
+    // Quando cliente mudar, habilita ou desabilita botão emitir nota
+    document.getElementById('selectClienteNota').addEventListener('change', habilitarBotaoEmitirNota);
+
+    function emitirNota() {
+      if(itensNota.length === 0) {
+        mostrarMensagem('Adicione pelo menos um item para emitir nota.', false);
+        return;
+      }
+
+      const clienteIndex = parseInt(document.getElementById('selectClienteNota').value, 10);
+      if(isNaN(clienteIndex) || !clientes[clienteIndex]) {
+        mostrarMensagem('Selecione um cliente válido.', false);
+        return;
+      }
+
+      const cliente = clientes[clienteIndex];
+      let total = 0;
+      let textoNota = '';
+      textoNota += 'PALMAS AUTO PEÇAS - NOTA FISCAL\n\n';
+      textoNota += `Cliente: ${cliente.nome}\nCPF/CNPJ: ${cliente.cpfcnpj}\nEndereço: ${cliente.endereco}\n\n`;
+      textoNota += 'Itens:\n';
+      textoNota += 'Código | Produto                | Valor Unit. | Qtde | Subtotal\n';
+      textoNota += '--------------------------------------------------------------\n';
+
+      itensNota.forEach(item => {
+        const subtotal = item.valor * item.quantidade;
+        total += subtotal;
+        textoNota += `${item.codigo.padEnd(6)} | ${item.nome.padEnd(22)} | R$ ${item.valor.toFixed(2).padStart(8).replace('.',',')} | ${item.quantidade.toString().padStart(4)} | R$ ${subtotal.toFixed(2).padStart(8).replace('.',',')}\n`;
+      });
+      textoNota += '--------------------------------------------------------------\n';
+      textoNota += `Total: R$ ${total.toFixed(2).replace('.',',')}\n`;
+      textoNota += '\nObrigado pela preferência!';
+
+      const preNota = document.getElementById('notaEmitida');
+      preNota.textContent = textoNota;
+      preNota.classList.remove('hidden');
+
+      document.getElementById('btnDownloadPdf').classList.remove('hidden');
+
+      mostrarMensagem('Nota fiscal emitida com sucesso!');
+    }
+
+    function limparNota() {
+      itensNota = [];
+      atualizarTabelaNota();
+      document.getElementById('notaEmitida').classList.add('hidden');
+      document.getElementById('btnDownloadPdf').classList.add('hidden');
+      habilitarBotaoEmitirNota();
+    }
+
+    // Gerar PDF da nota
+    async function baixarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const texto = document.getElementById('notaEmitida').textContent;
+
+      const lines = doc.splitTextToSize(texto, 180);
+      doc.setFont("Courier", "normal");
+      doc.setFontSize(12);
+      doc.text(lines, 10, 10);
+
+      doc.save("Nota_Fiscal_Palmas_AutoPecas.pdf");
+    }
+  </script>
 
 </body>
 </html>
