@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ setAutenticado }) => {
   const [usuario, setUsuario] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
@@ -17,6 +17,7 @@ const Login = () => {
 
     if (usuario === usuarioValido && senha === senhaValida) {
       // Se as credenciais forem válidas, redireciona para a página principal
+      setAutenticado(true);
       history.push('/');
     } else {
       setErro('Usuário ou senha inválidos');
