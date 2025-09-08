@@ -20,40 +20,13 @@
             background-color: var(--cor-creme-claro);
             margin: 0;
             padding: 0;
+            text-align: center;
         }
 
         header {
-            text-align: center;
             padding: 10px;
             background-color: var(--cor-marrom-escuro);
             color: white;
-        }
-
-        nav {
-            background-color: var(--cor-marrom-escuro);
-            padding: 10px;
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        nav ul li a:hover {
-            color: var(--cor-bege-claro);
         }
 
         form {
@@ -95,7 +68,6 @@
         footer {
             background-color: var(--cor-verde-musgo);
             color: white;
-            text-align: center;
             padding: 10px;
             position: fixed;
             width: 100%;
@@ -107,13 +79,8 @@
             text-decoration: none;
         }
 
-        /* Página oculta */
-        .hidden {
-            display: none;
-        }
-
+        /* Página de seleção de usuário */
         .selection-container {
-            text-align: center;
             margin-top: 50px;
         }
 
@@ -131,6 +98,17 @@
         .selection-container button:hover {
             background-color: var(--cor-terra);
         }
+
+        /* Página de login */
+        #login {
+            display: none;
+        }
+
+        /* Página oculta */
+        .hidden {
+            display: none;
+        }
+
     </style>
 </head>
 
@@ -140,65 +118,22 @@
         <h1>Texas Farm Store</h1>
     </header>
 
-    <!-- Tela de Seleção de Usuário -->
+    <!-- Tela Inicial de Seleção de Usuário -->
     <div id="selection-screen" class="selection-container">
         <h2>Escolha o tipo de usuário</h2>
         <button onclick="mostrarLogin('vendedor')">Vendedor</button>
         <button onclick="mostrarLogin('loja')">Administrador da Loja</button>
     </div>
 
-    <!-- Página de Login para o Vendedor -->
-    <div id="login-vendedor" class="hidden">
-        <h2>Login - Vendedor</h2>
-        <form onsubmit="login('vendedor', event)">
-            <input type="text" id="usuario-vendedor" placeholder="Usuário" required />
-            <input type="password" id="senha-vendedor" placeholder="Senha" required />
+    <!-- Tela de Login -->
+    <div id="login">
+        <h2>Login</h2>
+        <form onsubmit="login(event)">
+            <input type="text" id="usuario" placeholder="Usuário" required />
+            <input type="password" id="senha" placeholder="Senha" required />
             <button type="submit">Entrar</button>
         </form>
-        <p id="erro-vendedor" style="color: red;"></p>
-    </div>
-
-    <!-- Página de Login para o Administrador da Loja -->
-    <div id="login-loja" class="hidden">
-        <h2>Login - Administrador da Loja</h2>
-        <form onsubmit="login('loja', event)">
-            <input type="text" id="usuario-loja" placeholder="Usuário" required />
-            <input type="password" id="senha-loja" placeholder="Senha" required />
-            <button type="submit">Entrar</button>
-        </form>
-        <p id="erro-loja" style="color: red;"></p>
-    </div>
-
-    <!-- Página de Home -->
-    <div id="home" class="hidden">
-        <h2>Bem-vindo à Texas Farm Store!</h2>
-        <p>Conteúdo da loja...</p>
-    </div>
-
-    <!-- Cadastro de Produto -->
-    <div id="cadastro-produto" class="hidden">
-        <h2>Cadastro de Produto</h2>
-        <form onsubmit="cadastrarProduto(event)">
-            <input type="text" id="produto" placeholder="Nome do Produto" required />
-            <input type="number" id="preco" placeholder="Preço" required />
-            <button type="submit">Cadastrar Produto</button>
-        </form>
-    </div>
-
-    <!-- Cadastro de Cliente -->
-    <div id="cadastro-cliente" class="hidden">
-        <h2>Cadastro de Cliente</h2>
-        <form onsubmit="cadastrarCliente(event)">
-            <input type="text" id="cliente" placeholder="Nome do Cliente" required />
-            <input type="email" id="email" placeholder="E-mail" required />
-            <button type="submit">Cadastrar Cliente</button>
-        </form>
-    </div>
-
-    <!-- Vendas -->
-    <div id="vendas" class="hidden">
-        <h2>Vendas</h2>
-        <p>Área de Vendas da loja...</p>
+        <p id="erro" style="color: red;"></p>
     </div>
 
     <!-- Rodapé -->
@@ -207,57 +142,44 @@
     </footer>
 
     <script>
-        // Função para mostrar ou esconder as páginas
-        function mostrarPagina(pagina) {
-            // Esconder todas as páginas
-            const paginas = document.querySelectorAll('div');
-            paginas.forEach(p => p.classList.add('hidden'));
+        let tipoUsuario = '';
 
-            // Exibir a página escolhida
-            document.getElementById(pagina).classList.remove('hidden');
-        }
-
-        // Função para mostrar a tela de login específica para o tipo de usuário
+        // Função para mostrar a tela de login conforme o tipo de usuário
         function mostrarLogin(tipo) {
-            // Esconder a tela inicial de seleção
-            document.getElementById('selection-screen').classList.add('hidden');
+            tipoUsuario = tipo;
+            document.getElementById('selection-screen').classList.add('hidden'); // Esconde a tela de seleção
 
-            if (tipo === 'vendedor') {
-                // Exibe a página de login para vendedor
-                document.getElementById('login-vendedor').classList.remove('hidden');
-            } else if (tipo === 'loja') {
-                // Exibe a página de login para administrador da loja
-                document.getElementById('login-loja').classList.remove('hidden');
-            }
+            // Exibe o formulário de login
+            document.getElementById('login').classList.remove('hidden');
         }
 
         // Função de login
-        function login(tipo, event) {
+        function login(event) {
             event.preventDefault();
 
-            let usuario, senha, usuarioValido, senhaValida, erroId;
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
 
-            if (tipo === 'vendedor') {
-                usuario = document.getElementById('usuario-vendedor').value;
-                senha = document.getElementById('senha-vendedor').value;
+            let usuarioValido = '';
+            let senhaValida = '';
+            let erroId = 'erro';
+
+            if (tipoUsuario === 'vendedor') {
                 usuarioValido = 'vendedor';
                 senhaValida = 'vendedor123';
-                erroId = 'erro-vendedor';
-            } else {
-                usuario = document.getElementById('usuario-loja').value;
-                senha = document.getElementById('senha-loja').value;
+            } else if (tipoUsuario === 'loja') {
                 usuarioValido = 'admin';
                 senhaValida = 'admin123';
-                erroId = 'erro-loja';
             }
 
             if (usuario === usuarioValido && senha === senhaValida) {
                 document.getElementById(erroId).textContent = '';
-                mostrarPagina('home'); // Redireciona para a página inicial após login
+                window.location.href = 'home.html'; // Redirecionar para a página home após login bem-sucedido
             } else {
                 document.getElementById(erroId).textContent = 'Usuário ou senha inválidos';
             }
         }
+    </script>
+</body>
 
-        // Funções de cadastro
-        function cadastrar
+</html>
