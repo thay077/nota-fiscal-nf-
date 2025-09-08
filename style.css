@@ -1,1 +1,95 @@
+/* Definindo as cores principais */
+:root {
+  --cor-marrom-escuro: #4E3629;
+  --cor-bege-claro: #D4C5A9;
+  --cor-verde-musgo: #4B5D46;
+  --cor-terra: #B35646;
+  --cor-creme-claro: #F4E1C1;
+}
 
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--cor-creme-claro); /* Cor de fundo suave */
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  background-color: var(--cor-marrom-escuro); /* Fundo marrom escuro */
+  padding: 10px;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+nav ul li a:hover {
+  color: var(--cor-bege-claro); /* Quando o link é hover, fica bege claro */
+}
+
+div {
+  padding: 20px;
+  margin: 20px;
+  background-color: #fff; /* Fundo branco */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: var(--cor-marrom-escuro); /* Títulos em marrom escuro */
+}
+
+form input {
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  font-size: 16px;
+  border: 1px solid var(--cor-marrom-escuro);
+  border-radius: 5px;
+}
+
+form input:focus {
+  border-color: var(--cor-verde-musgo); /* Cor de foco verde musgo */
+}
+
+form button {
+  padding: 10px 20px;
+  background-color: var(--cor-terra); /* Fundo vermelho terracota */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: var(--cor-marrom-escuro); /* Fundo marrom escuro ao passar o mouse */
+}
+
+footer {
+  background-color: var(--cor-verde-musgo); /* Cor de fundo do rodapé */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+}
