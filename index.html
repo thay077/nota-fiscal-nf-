@@ -111,6 +111,26 @@
         .hidden {
             display: none;
         }
+
+        .selection-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .selection-container button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: var(--cor-marrom-escuro);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .selection-container button:hover {
+            background-color: var(--cor-terra);
+        }
     </style>
 </head>
 
@@ -120,32 +140,39 @@
         <h1>Texas Farm Store</h1>
     </header>
 
-    <!-- Navegação -->
-    <nav id="nav">
-        <ul>
-            <li><a href="#" onclick="mostrarPagina('home')">Home</a></li>
-            <li><a href="#" onclick="mostrarPagina('login')">Login</a></li>
-            <li><a href="#" onclick="mostrarPagina('cadastro-produto')" class="hidden">Cadastro de Produto</a></li>
-            <li><a href="#" onclick="mostrarPagina('cadastro-cliente')" class="hidden">Cadastro de Cliente</a></li>
-            <li><a href="#" onclick="mostrarPagina('vendas')" class="hidden">Vendas</a></li>
-        </ul>
-    </nav>
+    <!-- Tela de Seleção de Usuário -->
+    <div id="selection-screen" class="selection-container">
+        <h2>Escolha o tipo de usuário</h2>
+        <button onclick="mostrarLogin('vendedor')">Vendedor</button>
+        <button onclick="mostrarLogin('loja')">Administrador da Loja</button>
+    </div>
+
+    <!-- Página de Login para o Vendedor -->
+    <div id="login-vendedor" class="hidden">
+        <h2>Login - Vendedor</h2>
+        <form onsubmit="login('vendedor', event)">
+            <input type="text" id="usuario-vendedor" placeholder="Usuário" required />
+            <input type="password" id="senha-vendedor" placeholder="Senha" required />
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="erro-vendedor" style="color: red;"></p>
+    </div>
+
+    <!-- Página de Login para o Administrador da Loja -->
+    <div id="login-loja" class="hidden">
+        <h2>Login - Administrador da Loja</h2>
+        <form onsubmit="login('loja', event)">
+            <input type="text" id="usuario-loja" placeholder="Usuário" required />
+            <input type="password" id="senha-loja" placeholder="Senha" required />
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="erro-loja" style="color: red;"></p>
+    </div>
 
     <!-- Página de Home -->
     <div id="home" class="hidden">
         <h2>Bem-vindo à Texas Farm Store!</h2>
         <p>Conteúdo da loja...</p>
-    </div>
-
-    <!-- Página de Login -->
-    <div id="login">
-        <h2>Login - Texas Farm Store</h2>
-        <form onsubmit="login(event)">
-            <input type="text" id="usuario" placeholder="Usuário" required />
-            <input type="password" id="senha" placeholder="Senha" required />
-            <button type="submit">Entrar</button>
-        </form>
-        <p id="erro" style="color: red;"></p>
     </div>
 
     <!-- Cadastro de Produto -->
@@ -180,7 +207,7 @@
     </footer>
 
     <script>
-        // Função para mostrar as páginas
+        // Função para mostrar ou esconder as páginas
         function mostrarPagina(pagina) {
             // Esconder todas as páginas
             const paginas = document.querySelectorAll('div');
@@ -188,48 +215,49 @@
 
             // Exibir a página escolhida
             document.getElementById(pagina).classList.remove('hidden');
+        }
 
-            // Esconder ou mostrar itens de navegação
-            if (pagina === 'login') {
-                document.querySelectorAll('.hidden').forEach(link => link.classList.remove('hidden'));
-            } else {
-                document.querySelectorAll('.hidden').forEach(link => link.classList.add('hidden'));
+        // Função para mostrar a tela de login específica para o tipo de usuário
+        function mostrarLogin(tipo) {
+            // Esconder a tela inicial de seleção
+            document.getElementById('selection-screen').classList.add('hidden');
+
+            if (tipo === 'vendedor') {
+                // Exibe a página de login para vendedor
+                document.getElementById('login-vendedor').classList.remove('hidden');
+            } else if (tipo === 'loja') {
+                // Exibe a página de login para administrador da loja
+                document.getElementById('login-loja').classList.remove('hidden');
             }
         }
 
         // Função de login
-        function login(event) {
+        function login(tipo, event) {
             event.preventDefault();
-            const usuario = document.getElementById('usuario').value;
-            const senha = document.getElementById('senha').value;
 
-            // Simulação de login
-            const usuarioValido = 'admin';
-            const senhaValida = '12345';
+            let usuario, senha, usuarioValido, senhaValida, erroId;
+
+            if (tipo === 'vendedor') {
+                usuario = document.getElementById('usuario-vendedor').value;
+                senha = document.getElementById('senha-vendedor').value;
+                usuarioValido = 'vendedor';
+                senhaValida = 'vendedor123';
+                erroId = 'erro-vendedor';
+            } else {
+                usuario = document.getElementById('usuario-loja').value;
+                senha = document.getElementById('senha-loja').value;
+                usuarioValido = 'admin';
+                senhaValida = 'admin123';
+                erroId = 'erro-loja';
+            }
 
             if (usuario === usuarioValido && senha === senhaValida) {
-                document.getElementById('erro').textContent = '';
-                mostrarPagina('home'); // Redirecionar para a página inicial
+                document.getElementById(erroId).textContent = '';
+                mostrarPagina('home'); // Redireciona para a página inicial após login
             } else {
-                document.getElementById('erro').textContent = 'Usuário ou senha inválidos';
+                document.getElementById(erroId).textContent = 'Usuário ou senha inválidos';
             }
         }
 
-        // Função de cadastro de produto
-        function cadastrarProduto(event) {
-            event.preventDefault();
-            alert('Produto cadastrado!');
-        }
-
-        // Função de cadastro de cliente
-        function cadastrarCliente(event) {
-            event.preventDefault();
-            alert('Cliente cadastrado!');
-        }
-
-        // Mostrar a página inicial
-        mostrarPagina('home');
-    </script>
-</body>
-
-</html>
+        // Funções de cadastro
+        function cadastrar
