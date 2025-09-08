@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texas Farm Store</title>
+    <style>
+        /* Cores principais */
+        :root {
+            --cor-marrom-escuro: #4E3629;
+            --cor-bege-claro: #D4C5A9;
+            --cor-verde-musgo: #4B5D46;
+            --cor-terra: #B35646;
+            --cor-creme-claro: #F4E1C1;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--cor-creme-claro);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px;
+            background-color: var(--cor-marrom-escuro);
+            color: white;
+        }
+
+        nav {
+            background-color: var(--cor-marrom-escuro);
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            color: var(--cor-bege-claro);
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input {
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid var(--cor-marrom-escuro);
+            border-radius: 5px;
+        }
+
+        form input:focus {
+            border-color: var(--cor-verde-musgo);
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: var(--cor-terra);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: var(--cor-marrom-escuro);
+        }
+
+        footer {
+            background-color: var(--cor-verde-musgo);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Página oculta */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Texas Farm Store</h1>
+    </header>
+
+    <!-- Navegação -->
+    <nav id="nav">
+        <ul>
+            <li><a href="#" onclick="mostrarPagina('home')">Home</a></li>
+            <li><a href="#" onclick="mostrarPagina('login')">Login</a></li>
+            <li><a href="#" onclick="mostrarPagina('cadastro-produto')" class="hidden">Cadastro de Produto</a></li>
+            <li><a href="#" onclick="mostrarPagina('cadastro-cliente')" class="hidden">Cadastro de Cliente</a></li>
+            <li><a href="#" onclick="mostrarPagina('vendas')" class="hidden">Vendas</a></li>
+        </ul>
+    </nav>
+
+    <!-- Página de Home -->
+    <div id="home" class="hidden">
+        <h2>Bem-vindo à Texas Farm Store!</h2>
+        <p>Conteúdo da loja...</p>
+    </div>
+
+    <!-- Página de Login -->
+    <div id="login">
+        <h2>Login - Texas Farm Store</h2>
+        <form onsubmit="login(event)">
+            <input type="text" id="usuario" placeholder="Usuário" required />
+            <input type="password" id="senha" placeholder="Senha" required />
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="erro" style="color: red;"></p>
+    </div>
+
+    <!-- Cadastro de Produto -->
+    <div id="cadastro-produto" class="hidden">
+        <h2>Cadastro de Produto</h2>
+        <form onsubmit="cadastrarProduto(event)">
+            <input type="text" id="produto" placeholder="Nome do Produto" required />
+            <input type="number" id="preco" placeholder="Preço" required />
+            <button type="submit">Cadastrar Produto</button>
+        </form>
+    </div>
+
+    <!-- Cadastro de Cliente -->
+    <div id="cadastro-cliente" class="hidden">
+        <h2>Cadastro de Cliente</h2>
+        <form onsubmit="cadastrarCliente(event)">
+            <input type="text" id="cliente" placeholder="Nome do Cliente" required />
+            <input type="email" id="email" placeholder="E-mail" required />
+            <button type="submit">Cadastrar Cliente</button>
+        </form>
+    </div>
+
+    <!-- Vendas -->
+    <div id="vendas" class="hidden">
+        <h2>Vendas</h2>
+        <p>Área de Vendas da loja...</p>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>&copy; 2025 Texas Farm Store. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Função para mostrar as páginas
+        function mostrarPagina(pagina) {
+            // Esconder todas as páginas
+            const paginas = document.querySelectorAll('div');
+            paginas.forEach(p => p.classList.add('hidden'));
+
+            // Exibir a página escolhida
+            document.getElementById(pagina).classList.remove('hidden');
+
+            // Esconder ou mostrar itens de navegação
+            if (pagina === 'login') {
+                document.querySelectorAll('.hidden').forEach(link => link.classList.remove('hidden'));
+            } else {
+                document.querySelectorAll('.hidden').forEach(link => link.classList.add('hidden'));
+            }
+        }
+
+        // Função de login
+        function login(event) {
+            event.preventDefault();
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+
+            // Simulação de login
+            const usuarioValido = 'admin';
+            const senhaValida = '12345';
+
+            if (usuario === usuarioValido && senha === senhaValida) {
+                document.getElementById('erro').textContent = '';
+                mostrarPagina('home'); // Redirecionar para a página inicial
+            } else {
+                document.getElementById('erro').textContent = 'Usuário ou senha inválidos';
+            }
+        }
+
+        // Função de cadastro de produto
+        function cadastrarProduto(event) {
+            event.preventDefault();
+            alert('Produto cadastrado!');
+        }
+
+        // Função de cadastro de cliente
+        function cadastrarCliente(event) {
+            event.preventDefault();
+            alert('Cliente cadastrado!');
+        }
+
+        // Mostrar a página inicial
+        mostrarPagina('home');
+    </script>
+</body>
+
+</html>
