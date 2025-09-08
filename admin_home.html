@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Texas Farm Store - Login</title>
+    <title>Cadastro de Venda - Texas Farm Store</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,10 +18,10 @@
             text-align: center;
         }
         main {
-            padding: 50px 20px;
+            padding: 20px;
             text-align: center;
         }
-        input {
+        form input {
             padding: 10px;
             margin: 10px;
             font-size: 16px;
@@ -30,12 +30,13 @@
             border-radius: 5px;
         }
         button {
-            padding: 10px 20px;
+            padding: 15px;
             background-color: #B35646;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #4E3629;
@@ -44,26 +45,18 @@
 </head>
 <body>
     <header>
-        <h1>Texas Farm Store</h1>
+        <h1>Cadastro de Venda</h1>
     </header>
+
     <main>
-        <h2>Login</h2>
-        <form onsubmit="login(event)">
-            <input type="text" id="usuario" placeholder="Usuário" required>
-            <input type="password" id="senha" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
+        <h2>Cadastrar Nova Venda</h2>
+        <form>
+            <input type="text" id="produto" placeholder="Produto" required>
+            <input type="number" id="quantidade" placeholder="Quantidade" required>
+            <input type="number" id="preco" placeholder="Preço" required>
+            <button type="submit">Registrar Venda</button>
         </form>
-        <p id="erro" style="color: red;"></p>
+        <p><a href="vendedor_home.html">Voltar</a></p>
     </main>
-
-    <script>
-        function login(event) {
-            event.preventDefault();
-
-            const usuario = document.getElementById('usuario').value;
-            const senha = document.getElementById('senha').value;
-            const erroId = 'erro';
-
-            if (usuario === 'vendedor' && senha === 'vendedor123') {
-                window.location.href = 'vendedor_home.html';
-            } else if (usuario === 'admin' && senha === 'admin123') {
+</body>
+</html>
